@@ -165,6 +165,7 @@ body::after {
   transform: translateY(10px);
   pointer-events: none;
   max-width: 1040px;
+  min-width: 0; /* let wide children (the ASCII diagram) scroll instead of stretching the panel */
 }
 /* soft scrim so copy stays readable over the liquid */
 .panel::before {
@@ -372,8 +373,10 @@ body::after {
 /* ── process (double diamond) ───────────────── */
 .diamond {
   margin: 20px 0;
-  padding: 18px;
-  font-size: clamp(0.5rem, 1.35vw, 0.78rem);
+  padding: 18px 26px;
+  width: fit-content;   /* the box hugs the art */
+  max-width: 100%;
+  font-size: clamp(0.55rem, 1.5vw, 0.8rem);
   line-height: 1.45;
   color: var(--phos);
   text-shadow: 0 0 8px rgba(107, 255, 168, 0.25);
@@ -381,7 +384,9 @@ body::after {
   border-radius: 12px;
   background: rgba(6, 12, 9, 0.55);
   overflow-x: auto;
-  max-width: 900px;
+}
+@media (max-width: 480px) {
+  .diamond { padding: 12px 14px; font-size: 0.5rem; }
 }
 .dd-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 10px; max-width: 900px; }
 .dd-step {

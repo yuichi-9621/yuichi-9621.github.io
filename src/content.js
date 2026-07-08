@@ -282,21 +282,19 @@ export const process = {
   intro:
     'Every 0→1 project above ran on the Double Diamond: diverge to understand, converge on the real problem, diverge on solutions, converge on the one worth shipping. It keeps me honest — the discipline is in the narrowing.',
   diagram: String.raw`
-            DISCOVER          DEFINE            DEVELOP           DELIVER
-            diverge           converge          diverge           converge
+    DISCOVER · DEFINE               DEVELOP · DELIVER
+    diverge   converge              diverge   converge
 
-               /\                                  /\
-              /  \                                /  \
-             /    \                              /    \
-            /      \                            /      \
-   problem ▸        ▸ the real problem ▸       ▸        ▸ the thing worth
-            \      /                            \      /      shipping
-             \    /                              \    /
-              \  /                                \  /
-               \/                                  \/
+            /\                              /\
+           /  \                            /  \
+          /    \                          /    \
+ problem ▸      ▸  the real  ▸           ▸      ▸  worth
+          \    /   problem                \    /   shipping
+           \  /                            \  /
+            \/                              \/
 
-            research          problem            prototype         ship &
-            interviews        statement          test in situ      measure`,
+    research &      one sharp       prototype &     ship &
+    interviews      question        test in situ    measure`,
   steps: [
     ['discover', 'Interviews, shadowing, heuristic audits. Sit with the problem before touching pixels.'],
     ['define', 'One sharp problem statement and a persona the whole team can hold in their heads.'],
