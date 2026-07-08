@@ -343,31 +343,6 @@ body::after {
   .side-projects li { grid-template-columns: 1fr; }
 }
 
-/* ── about layout + ascii portrait ──────────── */
-.about-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 24px;
-  align-items: start;
-  max-width: 1040px;
-}
-.face {
-  font-size: 0.62rem;
-  line-height: 1.25;
-  color: var(--phos);
-  text-shadow: 0 0 10px rgba(107, 255, 168, 0.35);
-  border: 1px solid rgba(120, 255, 190, 0.16);
-  border-radius: 12px;
-  padding: 16px 20px;
-  background: rgba(6, 12, 9, 0.55);
-  overflow-x: auto;
-  max-width: 100%;
-}
-@media (max-width: 900px) {
-  .about-grid { grid-template-columns: 1fr; }
-  .face { width: fit-content; }
-}
-
 /* ── prose / about / contact ────────────────── */
 .prose { max-width: 660px; font-size: 0.85rem; line-height: 1.8; color: var(--ink); }
 .prose p + p { margin-top: 12px; }

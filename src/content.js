@@ -326,25 +326,6 @@ export const sideProjects = [
   },
 ];
 
-// Stylized ASCII self-portrait (decorative, hidden from screen readers).
-export const asciiFace = String.raw`
-          .:^~!!!!~^:.
-       :!JY55PPPPP55YJ!:
-     :?55YJ7~^::::^~7JY5?:
-    ~P5?^.  .:^^^^:.  .^?5~
-   ^PY: .^~!!~^^^^~!!~^. :Y^
-   YP. ~7~.          .~7~ .Y
-  .P7  ..  __    __   ..  7P.
-  .P!     |##|  |##|      !P.
-   Y7     |__|  |__|      7Y
-   ~5.       .  .        .5~
-    ?J.       ~~         J?
-     !?.    .____.      ?!
-      ^7~.   '--'     ~7^
-        :~!^:.    .:^!~:
-           .:^~~~~^:.
-      [ yuichi.exe loaded ]`;
-
 // Lines printed by the boot sequence in the hero terminal.
 export const bootLines = [
   'yuichi@portfolio:~$ ./init --mode=liquid',

@@ -1,4 +1,4 @@
-import { site, projects, about, events, process, sideProjects, asciiFace } from '../content.js';
+import { site, projects, about, events, process, sideProjects } from '../content.js';
 import { attachTilt } from './fx.js';
 
 const esc = (s) =>
@@ -51,13 +51,10 @@ export function renderSections({ onCardHover, openStudy }) {
   // ── about ──────────────────────────────────
   document.getElementById('about').innerHTML = `
     <h2 class="sec-head" id="about-h"><b>~/about</b> — whoami</h2>
-    <div class="about-grid">
-      <div class="prose">
-        <p class="lead">${esc(about.headline)}</p>
-        ${about.body.map((p) => `<p>${esc(p)}</p>`).join('')}
-        <blockquote class="human">${esc(about.human)}</blockquote>
-      </div>
-      <pre class="face" aria-hidden="true">${esc(asciiFace)}</pre>
+    <div class="prose">
+      <p class="lead">${esc(about.headline)}</p>
+      ${about.body.map((p) => `<p>${esc(p)}</p>`).join('')}
+      <blockquote class="human">${esc(about.human)}</blockquote>
     </div>
     <h3 class="sub-head">what I bring</h3>
     <dl class="pillars">
