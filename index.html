@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="Yuichi Okuhama — product designer. An interactive terminal portfolio." />
+    <meta name="theme-color" content="#060907" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23060907'/%3E%3Crect x='8' y='8' width='10' height='16' fill='%236bffa8'/%3E%3Ccircle cx='24' cy='21' r='4' fill='%2364f0ff'/%3E%3C/svg%3E" />
+    <title>Yuichi Okuhama — Product Designer</title>
+    <script type="module" src="/src/main.js"></script>
+  </head>
+  <body>
+    <!-- WebGL liquid/ASCII field -->
+    <canvas id="gl" aria-hidden="true"></canvas>
+    <div id="fallback-bg" aria-hidden="true" hidden></div>
+
+    <div id="app">
+      <!-- top status bar -->
+      <header id="statusbar">
+        <span class="status-left"><span class="dot" aria-hidden="true"></span>yuichi@portfolio</span>
+        <nav id="chipnav" aria-label="Sections"></nav>
+        <span class="status-right" id="clock" aria-hidden="true"></span>
+      </header>
+
+      <!-- hero -->
+      <main id="stage">
+        <section id="hero" class="panel is-open" aria-label="Intro">
+          <pre id="boot" aria-hidden="true"></pre>
+          <h1 id="name"></h1>
+          <p id="tagline"></p>
+          <p id="intro"></p>
+        </section>
+        <section id="work" class="panel" aria-label="Work" hidden></section>
+        <section id="about" class="panel" aria-label="About" hidden></section>
+        <section id="contact" class="panel" aria-label="Contact" hidden></section>
+      </main>
+
+      <!-- command line -->
+      <footer id="cli">
+        <div id="cli-log" aria-live="polite"></div>
+        <div id="cli-row">
+          <label for="cli-input" id="cli-prompt">→ ~ $</label>
+          <input id="cli-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false"
+                 placeholder="type `help` or click above" aria-label="Command input" />
+          <span id="cli-caret" aria-hidden="true"></span>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
