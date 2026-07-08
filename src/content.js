@@ -13,7 +13,7 @@ export const site = {
     'I take vague, complicated problems — in AI, blockchain, developer tools — and find the version that feels obvious. The goal is always the same: software people understand the moment they touch it.',
   email: 'yuokuhama@gmail.com',
   socials: [
-    { label: 'LinkedIn', url: 'https://www.linkedin.com/in/yuichiokuhama/' },
+    { label: 'LinkedIn', url: 'https://www.linkedin.com/in/yokuhama/' },
     { label: 'GitHub', url: 'https://github.com/yuichi-9621' },
     { label: 'Email', url: 'mailto:yuokuhama@gmail.com' },
   ],
@@ -232,9 +232,8 @@ export const projects = [
 export const about = {
   headline: 'I design for humans, not screens.',
   body: [
-    'I’m Yuichi — a Product Designer based in San Francisco with roots in Okinawa, Japan. My work spans AI-enhanced experiences, blockchain B2B platforms, and developer tools — the kind of products where most teams have stitched together five tools that don’t talk to each other, and someone has to make the whole thing feel like one.',
-    'I grew up around the precision of Japanese craft — the idea that an everyday object should be a quiet pleasure to use. That stuck. I sit inside complexity — technical, cultural, organizational — and find the version that feels simple. Not dumbed down. Just clear, and worth keeping.',
-    'I grew up in Okinawa — an island where things move slowly and people think carefully. That shaped how I approach design: I don’t rush to the solution. I sit with the problem first.',
+    'Okinawa-raised, San Francisco-based. I design AI experiences, blockchain platforms, and developer tools — products where five tools got stitched together and someone has to make it feel like one.',
+    'Japanese craft taught me that everyday objects should be a quiet pleasure to use. So I sit with the problem first, then find the version that feels simple. Not dumbed down — clear, and worth keeping.',
   ],
   human:
     'AI can generate screens. It can’t sit in a room with a logistics manager, notice what she’s afraid of, and design the guardrail that lets her trust an irreversible system. The more software machines write, the more the human parts — taste, judgment, translation, care — become the work. That’s the part I do.',
@@ -280,21 +279,23 @@ export const events = {
 export const process = {
   headline: 'How I get from fog to shipped.',
   intro:
-    'Every 0→1 project above ran on the Double Diamond: diverge to understand, converge on the real problem, diverge on solutions, converge on the one worth shipping. It keeps me honest — the discipline is in the narrowing.',
+    'Every 0→1 project above ran on the Double Diamond: diverge to understand, converge on the real problem, diverge on solutions, converge on the one worth shipping. In practice it’s messy — you loop back, re-open questions, re-converge. That back-and-forth isn’t failure; it’s the method working.',
   diagram: String.raw`
     DISCOVER · DEFINE               DEVELOP · DELIVER
-    diverge   converge              diverge   converge
+    diverge ⇄ converge              diverge ⇄ converge
 
             /\                              /\
            /  \                            /  \
           /    \                          /    \
- problem ▸      ▸  the real  ▸           ▸      ▸  worth
+problem ⇄       ⇄  the real              ⇄      ⇄  worth
           \    /   problem                \    /   shipping
            \  /                            \  /
             \/                              \/
 
     research &      one sharp       prototype &     ship &
-    interviews      question        test in situ    measure`,
+    interviews      question        test in situ    measure
+
+    (the arrows go both ways on purpose — real process loops back)`,
   steps: [
     ['discover', 'Interviews, shadowing, heuristic audits. Sit with the problem before touching pixels.'],
     ['define', 'One sharp problem statement and a persona the whole team can hold in their heads.'],
@@ -303,11 +304,54 @@ export const process = {
   ],
 };
 
+// Smaller projects — shipped fast, no full case study. Add `link` when ready.
+export const sideProjects = [
+  {
+    title: 'SociaLens',
+    desc: 'VR social commerce app — unique discovery features, prototyped and delivered. 2 awards from sponsors of ETH Mexico Global Hackathon 2022.',
+    tags: ['VR', 'Hackathon', '2 awards'],
+    link: '',
+  },
+  {
+    title: 'XrossLend',
+    desc: 'Lend and rent NFTs across chains. Designed the core flows alongside 3 developers. 6 awards from sponsors of ETH NYC Global Hackathon 2022.',
+    tags: ['Web3', 'Hackathon', '6 awards'],
+    link: '',
+  },
+  {
+    title: 'Halfway to Home Dog Rescue',
+    desc: 'Self-initiated redesign of a dog-rescue site — cutting bounce between pages and smoothing the path to finding your favorite furry friend.',
+    tags: ['Case study', 'Nonprofit'],
+    link: '',
+  },
+];
+
+// Stylized ASCII self-portrait (decorative, hidden from screen readers).
+export const asciiFace = String.raw`
+          .:^~!!!!~^:.
+       :!JY55PPPPP55YJ!:
+     :?55YJ7~^::::^~7JY5?:
+    ~P5?^.  .:^^^^:.  .^?5~
+   ^PY: .^~!!~^^^^~!!~^. :Y^
+   YP. ~7~.          .~7~ .Y
+  .P7  ..  __    __   ..  7P.
+  .P!     |##|  |##|      !P.
+   Y7     |__|  |__|      7Y
+   ~5.       .  .        .5~
+    ?J.       ~~         J?
+     !?.    .____.      ?!
+      ^7~.   '--'     ~7^
+        :~!^:.    .:^!~:
+           .:^~~~~^:.
+      [ yuichi.exe loaded ]`;
+
 // Lines printed by the boot sequence in the hero terminal.
 export const bootLines = [
   'yuichi@portfolio:~$ ./init --mode=liquid',
-  'loading design systems ......... ok',
-  'compiling shaders .............. ok',
-  'calibrating feel ............... ok',
-  'ready.',
+  'mounting /okinawa .............. ok',
+  'brewing sanpin tea ............. ok',
+  'aligning to the 8pt grid ....... ok',
+  'kerning feelings ............... ok',
+  'unread figma comments (47) ..... ignored',
+  'ready. (yes, it’s in the latest file. promise.)',
 ];

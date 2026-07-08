@@ -109,13 +109,10 @@ function setMotion(v) {
   localStorage.setItem('motion', v ? 'on' : 'off');
   motionBtn.textContent = `motion: ${v ? 'on' : 'off'}`;
   motionBtn.setAttribute('aria-pressed', String(v));
-  const liquid = renderer?.getLiquid() ?? 0;
-  renderer?.destroy();
-  $('gl').hidden = false;
-  $('fallback-bg').hidden = true;
-  bootRenderer();
-  renderer?.setLiquid(liquid);
+  document.body.classList.toggle('no-motion', !v);
+  renderer?.setReduced(!v);
 }
+document.body.classList.toggle('no-motion', !motionOn);
 motionBtn.textContent = `motion: ${motionOn ? 'on' : 'off'}`;
 motionBtn.setAttribute('aria-pressed', String(motionOn));
 motionBtn.addEventListener('click', () => setMotion(!motionOn));

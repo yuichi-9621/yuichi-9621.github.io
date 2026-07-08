@@ -1,4 +1,4 @@
-import { site, projects, about, events, process } from '../content.js';
+import { site, projects, about, events, process, sideProjects, asciiFace } from '../content.js';
 import { attachTilt } from './fx.js';
 
 const esc = (s) =>
@@ -23,7 +23,21 @@ export function renderSections({ onCardHover, openStudy }) {
         </button>`
         )
         .join('')}
-    </div>`;
+    </div>
+    <h3 class="sub-head">also shipped</h3>
+    <ul class="side-projects">
+      ${sideProjects
+        .map(
+          (p) => `
+        <li>
+          <span class="sp-title">${p.link ? `<a href="${p.link}" target="_blank" rel="noopener noreferrer">${esc(p.title)}</a>` : esc(p.title)}</span>
+          <span class="sp-desc">${esc(p.desc)}</span>
+          <span class="tags" aria-hidden="true">${p.tags.map((t) => `<span class="tag">${esc(t)}</span>`).join('')}</span>
+        </li>`
+        )
+        .join('')}
+    </ul>
+    <p class="prose dim-note">more experiments on <a class="inline-link" href="${site.socials.find((s) => s.label === 'GitHub').url}" target="_blank" rel="noopener noreferrer">github</a></p>`;
 
   work.querySelectorAll('.card').forEach((card) => {
     card.addEventListener('click', () => openStudy(card.dataset.id));
@@ -37,10 +51,13 @@ export function renderSections({ onCardHover, openStudy }) {
   // ── about ──────────────────────────────────
   document.getElementById('about').innerHTML = `
     <h2 class="sec-head" id="about-h"><b>~/about</b> — whoami</h2>
-    <div class="prose">
-      <p class="lead">${esc(about.headline)}</p>
-      ${about.body.map((p) => `<p>${esc(p)}</p>`).join('')}
-      <blockquote class="human">${esc(about.human)}</blockquote>
+    <div class="about-grid">
+      <div class="prose">
+        <p class="lead">${esc(about.headline)}</p>
+        ${about.body.map((p) => `<p>${esc(p)}</p>`).join('')}
+        <blockquote class="human">${esc(about.human)}</blockquote>
+      </div>
+      <pre class="face" aria-hidden="true">${esc(asciiFace)}</pre>
     </div>
     <h3 class="sub-head">what I bring</h3>
     <dl class="pillars">

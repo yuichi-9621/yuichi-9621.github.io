@@ -75,7 +75,7 @@ export function createRenderer(canvas, opts = {}) {
   });
   if (!gl) return null;
 
-  const reduced = opts.reducedMotion ?? false;
+  let reduced = opts.reducedMotion ?? false;
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
   const isMobile = matchMedia('(pointer: coarse)').matches;
 
@@ -227,6 +227,22 @@ export function createRenderer(canvas, opts = {}) {
     splat,
     setLiquid(v) { liquidTarget = v; },
     getLiquid() { return liquidTarget; },
+    // freeze/unfreeze in place — never recreate the GL context
+    // (a canvas whose context was lost cannot get a fresh one)
+    setReduced(v) {
+      reduced = v;
+      t0 = performance.now();
+      if (v) {
+        // clear residual pointer heat so the field freezes immediately
+        for (const t of [trailA, trailB]) {
+          gl.bindFramebuffer(gl.FRAMEBUFFER, t.fbo);
+          gl.clearColor(0, 0, 0, 1);
+          gl.clear(gl.COLOR_BUFFER_BIT);
+        }
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        ptr.strength = 0;
+      }
+    },
     destroy() {
       cancelAnimationFrame(raf);
       window.removeEventListener('pointermove', onMove);
