@@ -248,6 +248,7 @@ export const about = {
     ['2023', 'Headless API product design', 'Led design on a headless API product for B2B blockchain clients; advising on platform strategy.'],
     ['2022', 'mahola at Crypto Garage', 'Enterprise Web3 tools — no-code contract creation and real-time transaction analysis.'],
     ['2021', 'SnowX VR marketplace', 'First 3D NFT marketplace on VR. JETRO recognition, TechCrunch showcase.'],
+    ['2019–21', 'B.S. Informatics, UC Irvine', 'Human-Computer Interaction focus. Career Officer at the Japanese Student Association.'],
     ['origin', 'Okinawa, Japan', 'Island-raised. Slow thinking. Long perspective. Bilingual from the start.'],
   ],
   skills: [
