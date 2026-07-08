@@ -1,8 +1,8 @@
 import { site, projects } from '../content.js';
 
-const SECTIONS = ['home', 'work', 'about', 'contact'];
+const SECTIONS = ['home', 'work', 'process', 'about', 'events', 'contact'];
 
-export function createTerminal({ openPanel, getRenderer, setMotion, getMotion }) {
+export function createTerminal({ openPanel, openStudy, getRenderer, setMotion, getMotion }) {
   const input = document.getElementById('cli-input');
   const logEl = document.getElementById('cli-log');
   const history = [];
@@ -23,20 +23,27 @@ export function createTerminal({ openPanel, getRenderer, setMotion, getMotion })
       print(
         [
           'available commands:',
-          '  work · about · contact · home     navigate',
+          '  work · process · about · events · contact · home',
+          '  open snowx|mahola|netflix         read a case study',
           '  liquid · ascii                    melt / freeze the background',
-          '  motion on|off                     toggle animation',
+          '  motion on|off                     pause or resume animation',
           '  ls · whoami · email · clear       the usual suspects',
         ].join('\n')
       );
     },
     home() { openPanel('home'); print('cd ~'); },
-    work() { openPanel('work'); print(`cd ~/work — ${projects.length} projects`); },
+    work() { openPanel('work'); print(`cd ~/work — ${projects.length} case studies`); },
+    process() { openPanel('process'); print('cd ~/process — the double diamond'); },
     about() { openPanel('about'); print('cd ~/about'); },
+    events() { openPanel('events'); print('cd ~/events — creative tech series'); },
     contact() { openPanel('contact'); print('cd ~/contact'); },
     clear() { logEl.innerHTML = ''; },
-    ls() { print(SECTIONS.filter((s) => s !== 'home').map((s) => s + '/').join('  ')); },
-    whoami() { print(`${site.name.toLowerCase().replace(' ', '.')} — ${site.role.toLowerCase()}`); },
+    ls() { print(SECTIONS.filter((s) => s !== 'home').map((s) => s + '/').join('  ') + '  ' + projects.map((p) => p.id).join('  ')); },
+    whoami() { print(`${site.name.toLowerCase().replace(' ', '.')} — ${site.role.toLowerCase()} · okinawa → sf`); },
+    open(id) {
+      if (id && openStudy(id)) print(`opening ~/work/${id}`);
+      else print(`usage: open ${projects.map((p) => p.id).join('|')}`);
+    },
     email() {
       print(`opening mailto:${site.email}`);
       location.href = `mailto:${site.email}`;
@@ -52,9 +59,12 @@ export function createTerminal({ openPanel, getRenderer, setMotion, getMotion })
       print('recrystallized into glyphs.');
     },
     motion(arg) {
-      if (arg === 'off') { setMotion(false); print('motion: off — the field is frozen.'); }
-      else if (arg === 'on') { setMotion(true); print('motion: on'); }
+      if (arg === 'off') setMotion(false);
+      else if (arg === 'on') setMotion(true);
       else print(`motion is ${getMotion() ? 'on' : 'off'} — try \`motion off\` or \`motion on\``);
+    },
+    photography() {
+      print('shot on leica · san francisco & japan — the discipline of composing a frame,\nwaiting for the light, and getting it right in-camera is the same discipline\nI bring to an interface. gallery coming soon.');
     },
     sudo(...args) {
       if (args.join(' ').includes('hire')) {
@@ -68,6 +78,10 @@ export function createTerminal({ openPanel, getRenderer, setMotion, getMotion })
       print('you are already in it.');
     },
   };
+  // project ids as direct commands: `snowx`, `mahola`, `netflix`
+  for (const p of projects) {
+    commands[p.id] = () => { openStudy(p.id); print(`opening ~/work/${p.id}`); };
+  }
 
   function openSocial(label) {
     const s = site.socials.find((x) => x.label === label);
@@ -85,7 +99,6 @@ export function createTerminal({ openPanel, getRenderer, setMotion, getMotion })
     histIdx = history.length;
     const [cmd, ...args] = line.toLowerCase().split(/\s+/);
     if (commands[cmd]) commands[cmd](...args);
-    else if (SECTIONS.includes(cmd)) commands[cmd]();
     else print(`command not found: ${cmd} — try \`help\``);
   }
 
@@ -106,13 +119,6 @@ export function createTerminal({ openPanel, getRenderer, setMotion, getMotion })
       const match = [...Object.keys(commands)].find((c) => c.startsWith(v));
       if (match) input.value = match;
     }
-  });
-
-  // typing anywhere (outside inputs) focuses the prompt — the site is a terminal
-  window.addEventListener('keydown', (e) => {
-    if (e.metaKey || e.ctrlKey || e.altKey) return;
-    const tag = document.activeElement?.tagName;
-    if (tag !== 'INPUT' && tag !== 'TEXTAREA' && e.key.length === 1) input.focus();
   });
 
   return { run, print };

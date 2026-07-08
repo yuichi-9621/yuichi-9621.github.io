@@ -1,14 +1,15 @@
 import './styles.css';
-import { site, bootLines } from './content.js';
+import { site, bootLines, projects } from './content.js';
 import { createRenderer } from './gl/renderer.js';
-import { renderSections } from './ui/sections.js';
+import { renderSections, renderStudy } from './ui/sections.js';
 import { createTerminal } from './ui/terminal.js';
 
 const $ = (id) => document.getElementById(id);
 
-// ── motion preference ────────────────────────
+// ── motion preference (persisted, defaults to OS setting) ──
 const rmQuery = matchMedia('(prefers-reduced-motion: reduce)');
-let motionOn = !rmQuery.matches;
+const stored = localStorage.getItem('motion');
+let motionOn = stored !== null ? stored === 'on' : !rmQuery.matches;
 
 // ── background renderer (graceful fallback) ──
 let renderer = null;
@@ -28,32 +29,87 @@ function bootRenderer() {
 }
 
 // ── panels / router ──────────────────────────
-const panels = ['home', 'work', 'about', 'contact'];
-function openPanel(name) {
+const panels = ['home', 'work', 'study', 'process', 'about', 'events', 'contact'];
+const navPanels = panels.filter((p) => p !== 'study');
+let firstOpen = true;
+
+function openPanel(name, { focus = true } = {}) {
   for (const p of panels) {
     const el = $(p === 'home' ? 'hero' : p);
     const open = p === name;
     el.hidden = !open;
-    // force reflow so the transition replays
-    if (open) void el.offsetWidth;
+    if (open) void el.offsetWidth; // replay the entrance transition
     el.classList.toggle('is-open', open);
   }
-  document.querySelectorAll('.chip').forEach((c) =>
-    c.classList.toggle('active', c.dataset.target === name)
+  document.querySelectorAll('#chipnav .chip').forEach((c) => {
+    const current = c.dataset.target === name;
+    c.classList.toggle('active', current);
+    if (current) c.setAttribute('aria-current', 'page');
+    else c.removeAttribute('aria-current');
+  });
+  const hash = name === 'home' ? '#' : `#${name}`;
+  if (name !== 'study' && location.hash !== hash) history.replaceState(null, '', hash);
+  // move focus to the opened panel's heading so screen readers announce context
+  if (focus && !firstOpen) {
+    const el = $(name === 'home' ? 'hero' : name);
+    const h = el.querySelector('h1, h2');
+    if (h) {
+      h.setAttribute('tabindex', '-1');
+      h.focus({ preventScroll: true });
+    }
+    $('stage').scrollTop = 0;
+  }
+  firstOpen = false;
+}
+
+function openStudy(id) {
+  if (!renderStudy(id)) return false;
+  openPanel('study');
+  history.replaceState(null, '', `#${id}`);
+  wireStudy();
+  return true;
+}
+
+function wireStudy() {
+  const el = $('study');
+  el.querySelector('[data-back]')?.addEventListener('click', () => openPanel('work'));
+  el.querySelectorAll('[data-study]').forEach((b) =>
+    b.addEventListener('click', () => openStudy(b.dataset.study))
   );
-  if (location.hash !== `#${name}`) history.replaceState(null, '', name === 'home' ? '#' : `#${name}`);
 }
 
 // chips
 const chipnav = $('chipnav');
-for (const p of panels) {
+for (const p of navPanels) {
   const b = document.createElement('button');
   b.className = 'chip';
+  b.type = 'button';
   b.dataset.target = p;
   b.textContent = p === 'home' ? '~' : p.toUpperCase();
   b.addEventListener('click', () => openPanel(p));
   chipnav.appendChild(b);
 }
+
+// motion toggle (visible pause control — WCAG 2.2.2)
+const motionBtn = $('motion-toggle');
+function setMotion(v) {
+  motionOn = v;
+  localStorage.setItem('motion', v ? 'on' : 'off');
+  motionBtn.textContent = `motion: ${v ? 'on' : 'off'}`;
+  motionBtn.setAttribute('aria-pressed', String(v));
+  const liquid = renderer?.getLiquid() ?? 0;
+  renderer?.destroy();
+  $('gl').hidden = false;
+  $('fallback-bg').hidden = true;
+  bootRenderer();
+  renderer?.setLiquid(liquid);
+}
+motionBtn.textContent = `motion: ${motionOn ? 'on' : 'off'}`;
+motionBtn.setAttribute('aria-pressed', String(motionOn));
+motionBtn.addEventListener('click', () => setMotion(!motionOn));
+rmQuery.addEventListener('change', (e) => {
+  if (localStorage.getItem('motion') === null) setMotion(!e.matches);
+});
 
 // ── hero: boot sequence + typed name ─────────
 function typeBoot() {
@@ -126,19 +182,18 @@ setInterval(tickClock, 1000);
 
 // ── wire everything ──────────────────────────
 bootRenderer();
-renderSections((x, y) => renderer?.splat(x, y, 1.4));
+renderSections({
+  onCardHover: (x, y) => renderer?.splat(x, y, 1.4),
+  openStudy,
+});
 
 const term = createTerminal({
   openPanel,
+  openStudy,
   getRenderer: () => renderer,
   setMotion(v) {
-    motionOn = v;
-    const liquid = renderer?.getLiquid() ?? 0;
-    renderer?.destroy();
-    $('gl').hidden = false;
-    $('fallback-bg').hidden = true;
-    bootRenderer();
-    renderer?.setLiquid(liquid);
+    setMotion(v);
+    term.print(v ? 'motion: on' : 'motion: off — the field is frozen.');
   },
   getMotion: () => motionOn,
 });
@@ -146,9 +201,10 @@ const term = createTerminal({
 typeBoot();
 typeName();
 
-// deep link (#work etc.)
+// deep links: #work, #process … or a project id (#snowx)
 const initial = location.hash.replace('#', '');
-openPanel(panels.includes(initial) ? initial : 'home');
+if (projects.some((p) => p.id === initial)) openStudy(initial);
+else openPanel(navPanels.includes(initial) ? initial : 'home', { focus: false });
 
 // greet
-term.print(`welcome. type \`help\` — or just start clicking. everything melts.`);
+term.print('welcome. type `help` — or just start clicking. everything melts.');
