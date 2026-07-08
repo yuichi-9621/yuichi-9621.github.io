@@ -73,6 +73,10 @@ export function renderSections({ onCardHover, openStudy }) {
     </ol>
     <div class="skill-row" role="list" aria-label="Skills">
       ${about.skills.map((s) => `<span class="tag" role="listitem">${esc(s)}</span>`).join('')}
+    </div>
+    <h3 class="sub-head">languages</h3>
+    <div class="skill-row" role="list" aria-label="Languages">
+      ${about.languages.map((l) => `<span class="tag" role="listitem">${esc(l)}</span>`).join('')}
     </div>`;
 
   // ── process (double diamond) ───────────────

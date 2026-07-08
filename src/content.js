@@ -245,12 +245,12 @@ export const about = {
   ],
   timeline: [
     ['now', 'Creative tech events', 'Curating a series at the intersection of design, AI, and emerging technology in San Francisco.'],
-    ['2023', 'Headless API product design', 'Led design on a headless API product for B2B blockchain clients; advising on platform strategy.'],
     ['2022', 'mahola at Crypto Garage', 'Enterprise Web3 tools — no-code contract creation and real-time transaction analysis.'],
     ['2021', 'SnowX VR marketplace', 'First 3D NFT marketplace on VR. JETRO recognition, TechCrunch showcase.'],
-    ['2019–21', 'B.S. Informatics, UC Irvine', 'Human-Computer Interaction focus. Career Officer at the Japanese Student Association.'],
+    ['2019–21', 'B.S. Informatics, UC Irvine', 'Human-Computer Interaction focus, Donald Bren School of ICS.'],
     ['origin', 'Okinawa, Japan', 'Island-raised. Slow thinking. Long perspective. Bilingual from the start.'],
   ],
+  languages: ['Japanese — native', 'English — native', 'Tagalog — conversational'],
   skills: [
     'Product strategy',
     'Interaction design',
