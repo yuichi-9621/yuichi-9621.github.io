@@ -3,6 +3,10 @@ import { site, bootLines, projects } from './content.js';
 import { createRenderer } from './gl/renderer.js';
 import { renderSections, renderStudy } from './ui/sections.js';
 import { createTerminal } from './ui/terminal.js';
+import {
+  setFxEnabled, panelIn, initPill, movePill,
+  attachScramble, initPress, countUpMetrics,
+} from './ui/fx.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -10,6 +14,7 @@ const $ = (id) => document.getElementById(id);
 const rmQuery = matchMedia('(prefers-reduced-motion: reduce)');
 const stored = localStorage.getItem('motion');
 let motionOn = stored !== null ? stored === 'on' : !rmQuery.matches;
+setFxEnabled(motionOn);
 
 // ── background renderer (graceful fallback) ──
 let renderer = null;
@@ -47,6 +52,8 @@ function openPanel(name, { focus = true } = {}) {
     if (current) c.setAttribute('aria-current', 'page');
     else c.removeAttribute('aria-current');
   });
+  movePill(chipnav, !firstOpen);
+  panelIn($(name === 'home' ? 'hero' : name));
   const hash = name === 'home' ? '#' : `#${name}`;
   if (name !== 'study' && location.hash !== hash) history.replaceState(null, '', hash);
   // move focus to the opened panel's heading so screen readers announce context
@@ -67,6 +74,7 @@ function openStudy(id) {
   openPanel('study');
   history.replaceState(null, '', `#${id}`);
   wireStudy();
+  countUpMetrics($('study'));
   return true;
 }
 
@@ -88,12 +96,16 @@ for (const p of navPanels) {
   b.textContent = p === 'home' ? '~' : p.toUpperCase();
   b.addEventListener('click', () => openPanel(p));
   chipnav.appendChild(b);
+  attachScramble(b);
 }
+initPill(chipnav);
+initPress(document);
 
 // motion toggle (visible pause control — WCAG 2.2.2)
 const motionBtn = $('motion-toggle');
 function setMotion(v) {
   motionOn = v;
+  setFxEnabled(v);
   localStorage.setItem('motion', v ? 'on' : 'off');
   motionBtn.textContent = `motion: ${v ? 'on' : 'off'}`;
   motionBtn.setAttribute('aria-pressed', String(v));

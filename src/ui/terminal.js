@@ -1,4 +1,5 @@
 import { site, projects } from '../content.js';
+import { lineIn } from './fx.js';
 
 const SECTIONS = ['home', 'work', 'process', 'about', 'events', 'contact'];
 
@@ -14,6 +15,7 @@ export function createTerminal({ openPanel, openStudy, getRenderer, setMotion, g
     if (isCmd) div.textContent = text;
     else div.innerHTML = text;
     logEl.appendChild(div);
+    lineIn(div);
     while (logEl.children.length > 24) logEl.removeChild(logEl.firstChild);
     logEl.scrollTop = logEl.scrollHeight;
   };

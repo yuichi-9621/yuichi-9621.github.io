@@ -13,6 +13,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@fontsource/jetbrains-mono": "^5.2.8"
+    "@fontsource/jetbrains-mono": "^5.2.8",
+    "motion": "^12.42.2"
   }
 }

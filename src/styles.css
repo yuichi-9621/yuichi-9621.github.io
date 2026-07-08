@@ -107,7 +107,17 @@ body::after {
 }
 @keyframes pulse { 50% { opacity: 0.45; } }
 
-#chipnav { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+#chipnav { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; position: relative; }
+.nav-pill {
+  position: absolute;
+  left: 0; top: 0;
+  background: var(--phos);
+  border-radius: 999px;
+  box-shadow: 0 0 18px rgba(107, 255, 168, 0.35);
+  opacity: 0;
+  will-change: transform, width;
+}
+#chipnav .chip { position: relative; z-index: 1; }
 .chip {
   font: 500 0.7rem/1 var(--mono);
   letter-spacing: 0.12em;
@@ -126,10 +136,12 @@ body::after {
 }
 .chip.active, .chip[aria-current='page'] {
   color: #04120a;
-  background: var(--phos);
-  border-color: var(--phos);
+  border-color: transparent;
   text-shadow: none;
 }
+/* the sliding pill supplies the active background inside #chipnav;
+   standalone chips (motion toggle) still get their own */
+:not(#chipnav) > .chip.active { background: var(--phos); }
 
 .status-right {
   display: flex;
@@ -267,7 +279,7 @@ body::after {
   backdrop-filter: blur(14px) saturate(1.5);
   -webkit-backdrop-filter: blur(14px) saturate(1.5);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 18px 40px rgba(0, 0, 0, 0.35);
-  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s, box-shadow 0.3s;
+  transition: border-color 0.3s, box-shadow 0.3s; /* transform is fx.js's job (tilt) */
   overflow: hidden;
 }
 .card::before {
@@ -281,7 +293,7 @@ body::after {
   pointer-events: none;
 }
 .card:hover, .card:focus-visible {
-  transform: translateY(-4px);
+  /* lift + 3D tilt handled by fx.js so pointer position can steer it */
   border-color: rgba(140, 255, 205, 0.45);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 26px 60px rgba(0, 0, 0, 0.45),
               0 0 34px rgba(107, 255, 168, 0.10);

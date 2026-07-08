@@ -5,8 +5,12 @@ piece: a domain-warped liquid gradient rendered as terminal glyphs that **melt
 into smooth liquid** wherever the cursor moves. Navigation is a real command
 prompt (`help`, `work`, `about`, `contact` …) — or just click.
 
-Built with vanilla JS + Vite. No frameworks, no trackers, ~9 KB of gzipped JS
-plus self-hosted fonts. Free hosting on GitHub Pages.
+Built with vanilla JS + Vite — no frameworks, no trackers. The only runtime
+dependency is [Motion](https://motion.dev) (springs, stagger) driving the
+interaction layer in `src/ui/fx.js`: staggered panel entrances, the sliding
+nav pill, 3D card tilt, text scramble, and metric count-ups. Everything
+respects the motion toggle and `prefers-reduced-motion`. Free hosting on
+GitHub Pages.
 
 ## Editing content
 

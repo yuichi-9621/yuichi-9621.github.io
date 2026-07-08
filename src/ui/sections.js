@@ -1,4 +1,5 @@
 import { site, projects, about, events, process } from '../content.js';
+import { attachTilt } from './fx.js';
 
 const esc = (s) =>
   String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -30,6 +31,7 @@ export function renderSections({ onCardHover, openStudy }) {
       const r = card.getBoundingClientRect();
       onCardHover?.(r.left + r.width / 2, r.top + r.height / 2);
     });
+    attachTilt(card);
   });
 
   // ── about ──────────────────────────────────
