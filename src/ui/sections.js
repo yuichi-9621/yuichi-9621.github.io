@@ -36,8 +36,7 @@ export function renderSections({ onCardHover, openStudy }) {
         </li>`
         )
         .join('')}
-    </ul>
-    <p class="prose dim-note">more experiments on <a class="inline-link" href="${site.socials.find((s) => s.label === 'GitHub').url}" target="_blank" rel="noopener noreferrer">github</a></p>`;
+    </ul>`;
 
   work.querySelectorAll('.card').forEach((card) => {
     card.addEventListener('click', () => openStudy(card.dataset.id));

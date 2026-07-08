@@ -245,6 +245,7 @@ export const about = {
   ],
   timeline: [
     ['now', 'Creative tech events', 'Curating a series at the intersection of design, AI, and emerging technology in San Francisco.'],
+    ['2023', 'Netflix UI/UX Bootcamp', 'Foundational + Advanced tracks — human-centered research and design methods. The origin of the case study in ~/work/netflix.'],
     ['2022', 'mahola at Crypto Garage', 'Enterprise Web3 tools — no-code contract creation and real-time transaction analysis.'],
     ['2021', 'SnowX VR marketplace', 'First 3D NFT marketplace on VR. JETRO recognition, TechCrunch showcase.'],
     ['2019–21', 'B.S. Informatics, UC Irvine', 'Human-Computer Interaction focus, Donald Bren School of ICS.'],
@@ -267,7 +268,6 @@ export const events = {
   headline: 'Shaping the conversation.',
   body: [
     'I run a recurring creative tech event series in San Francisco — bringing together designers, founders, and technologists exploring what design means when AI is doing half the work.',
-    'Not panels. Not pitches. Real conversations about where things are going, with the people building them.',
   ],
   themes: [
     ['01', 'Design × AI', 'When intelligence becomes a design material'],
