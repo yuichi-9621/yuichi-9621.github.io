@@ -51,7 +51,6 @@ export function createTerminal({ openPanel, openStudy, getRenderer, setMotion, g
       location.href = `mailto:${site.email}`;
     },
     linkedin() { openSocial('LinkedIn'); },
-    github() { openSocial('GitHub'); },
     liquid() {
       getRenderer()?.setLiquid(1);
       print('surface tension released. everything is liquid now. type `ascii` to re-freeze.');

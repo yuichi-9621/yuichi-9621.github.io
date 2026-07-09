@@ -14,7 +14,6 @@ export const site = {
   email: 'yuokuhama@gmail.com',
   socials: [
     { label: 'LinkedIn', url: 'https://www.linkedin.com/in/yokuhama/' },
-    { label: 'GitHub', url: 'https://github.com/yuichi-9621' },
     { label: 'Email', url: 'mailto:yuokuhama@gmail.com' },
   ],
 };
@@ -96,13 +95,13 @@ export const projects = [
     index: '02',
     title: 'mahola: Enterprise Blockchain, No Code',
     org: 'Crypto Garage',
-    year: '2023–24',
+    year: '2023-24',
     tags: ['B2B', 'No-Code', 'Enterprise'],
     summary:
       'A no-code contract builder and real-time transaction analysis platform. Business teams deployed and monitored blockchain infrastructure without an engineer in the loop.',
     meta: [
       ['role', 'Product Designer (end-to-end)'],
-      ['timeline', '2023–24'],
+      ['timeline', '2023-24'],
       ['context', 'Crypto Garage · Enterprise B2B'],
       ['surface', 'Web dashboard + no-code builder'],
     ],
@@ -244,10 +243,10 @@ export const about = {
   ],
   timeline: [
     ['now', 'Creative tech events', 'Curating a series at the intersection of design, AI, and emerging technology in San Francisco.'],
-    ['2023–24', 'mahola at Crypto Garage', 'Enterprise Web3 tools: no-code contract creation and real-time transaction analysis.'],
+    ['2023-24', 'mahola at Crypto Garage', 'Enterprise Web3 tools: no-code contract creation and real-time transaction analysis.'],
     ['2022', 'Netflix UI/UX Bootcamp', 'Foundational and Advanced tracks, a full year of human-centered research and design methods. The origin of the case study in ~/work/netflix.'],
     ['2021', 'SnowX VR marketplace', 'First 3D NFT marketplace on VR. JETRO recognition, TechCrunch showcase.'],
-    ['2019–21', 'B.S. Informatics, UC Irvine', 'Human-Computer Interaction focus, Donald Bren School of ICS.'],
+    ['2019-21', 'B.S. Informatics, UC Irvine', 'Human-Computer Interaction focus, Donald Bren School of ICS.'],
     ['origin', 'Okinawa, Japan', 'Island-raised. Slow thinking. Long perspective. Bilingual from the start.'],
   ],
   languages: ['Japanese (native)', 'English (native)', 'Tagalog (conversational)'],
