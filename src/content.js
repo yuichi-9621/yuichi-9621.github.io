@@ -241,7 +241,6 @@ export const about = {
     ['Mental models', 'Untangling vague problems into the most accessible flow — so people get value on first touch.'],
     ['Craft + business', 'Pixel-level care, balanced against speed and the bottom line. Pretty UI that also ships and pays off.'],
     ['End to end', 'Idea → UX → pixel-perfect execution, driven to the ship line alongside engineers.'],
-    ['Designer who codes', 'I build, not just spec. This site is hand-written — shaders included.'],
   ],
   timeline: [
     ['now', 'Creative tech events', 'Curating a series at the intersection of design, AI, and emerging technology in San Francisco.'],
@@ -282,21 +281,21 @@ export const process = {
   intro:
     'Every 0→1 project above ran on the Double Diamond: diverge to understand, converge on the real problem, diverge on solutions, converge on the one worth shipping. In practice it’s messy — you loop back, re-open questions, re-converge. That back-and-forth isn’t failure; it’s the method working.',
   diagram: String.raw`
-    DISCOVER · DEFINE               DEVELOP · DELIVER
-    diverge ⇄ converge              diverge ⇄ converge
+             DISCOVER                       DEVELOP
+             diverge                        diverge
 
-            /\                              /\
-           /  \                            /  \
-          /    \                          /    \
-problem ⇄       ⇄  the real              ⇄      ⇄  worth
-          \    /   problem                \    /   shipping
-           \  /                            \  /
-            \/                              \/
+                /\                            /\
+               /  \                          /  \
+              /    \                        /    \
+the problem  <      > ⇄ the real problem ⇄ <      >  worth shipping
+              \    /                        \    /
+               \  /                          \  /
+                \/                            \/
 
-    research &      one sharp       prototype &     ship &
-    interviews      question        test in situ    measure
+             converge                      converge
+             DEFINE                         DELIVER
 
-    (the arrows go both ways on purpose — real process loops back)`,
+      ←  the arrows run both ways — real process loops back  →`,
   steps: [
     ['discover', 'Interviews, shadowing, heuristic audits. Sit with the problem before touching pixels.'],
     ['define', 'One sharp problem statement and a persona the whole team can hold in their heads.'],
