@@ -246,7 +246,7 @@ export const about = {
   timeline: [
     ['now', 'Creative tech events', 'Curating a series at the intersection of design, AI, and emerging technology in San Francisco.'],
     ['2023–24', 'mahola at Crypto Garage', 'Enterprise Web3 tools — no-code contract creation and real-time transaction analysis.'],
-    ['2023', 'Netflix UI/UX Bootcamp', 'Foundational + Advanced tracks — human-centered research and design methods. The origin of the case study in ~/work/netflix.'],
+    ['2022', 'Netflix UI/UX Bootcamp', 'Foundational + Advanced tracks — a full year of human-centered research and design methods. The origin of the case study in ~/work/netflix.'],
     ['2021', 'SnowX VR marketplace', 'First 3D NFT marketplace on VR. JETRO recognition, TechCrunch showcase.'],
     ['2019–21', 'B.S. Informatics, UC Irvine', 'Human-Computer Interaction focus, Donald Bren School of ICS.'],
     ['origin', 'Okinawa, Japan', 'Island-raised. Slow thinking. Long perspective. Bilingual from the start.'],
