@@ -34,14 +34,14 @@ export function createTerminal({ openPanel, openStudy, getRenderer, setMotion, g
       );
     },
     home() { openPanel('home'); print('cd ~'); },
-    work() { openPanel('work'); print(`cd ~/work — ${projects.length} case studies`); },
-    process() { openPanel('process'); print('cd ~/process — the double diamond'); },
+    work() { openPanel('work'); print(`cd ~/work · ${projects.length} case studies`); },
+    process() { openPanel('process'); print('cd ~/process · the double diamond'); },
     about() { openPanel('about'); print('cd ~/about'); },
-    events() { openPanel('events'); print('cd ~/events — creative tech series'); },
+    events() { openPanel('events'); print('cd ~/events · creative tech series'); },
     contact() { openPanel('contact'); print('cd ~/contact'); },
     clear() { logEl.innerHTML = ''; },
     ls() { print(SECTIONS.filter((s) => s !== 'home').map((s) => s + '/').join('  ') + '  ' + projects.map((p) => p.id).join('  ')); },
-    whoami() { print(`${site.name.toLowerCase().replace(' ', '.')} — ${site.role.toLowerCase()} · okinawa → sf`); },
+    whoami() { print(`${site.name.toLowerCase().replace(' ', '.')} · ${site.role.toLowerCase()} · okinawa → sf`); },
     open(id) {
       if (id && openStudy(id)) print(`opening ~/work/${id}`);
       else print(`usage: open ${projects.map((p) => p.id).join('|')}`);
@@ -54,7 +54,7 @@ export function createTerminal({ openPanel, openStudy, getRenderer, setMotion, g
     github() { openSocial('GitHub'); },
     liquid() {
       getRenderer()?.setLiquid(1);
-      print('surface tension released — everything is liquid now. type `ascii` to re-freeze.');
+      print('surface tension released. everything is liquid now. type `ascii` to re-freeze.');
     },
     ascii() {
       getRenderer()?.setLiquid(0);
@@ -63,10 +63,10 @@ export function createTerminal({ openPanel, openStudy, getRenderer, setMotion, g
     motion(arg) {
       if (arg === 'off') setMotion(false);
       else if (arg === 'on') setMotion(true);
-      else print(`motion is ${getMotion() ? 'on' : 'off'} — try \`motion off\` or \`motion on\``);
+      else print(`motion is ${getMotion() ? 'on' : 'off'}. try \`motion off\` or \`motion on\``);
     },
     photography() {
-      print('shot on leica · san francisco & japan — the discipline of composing a frame,\nwaiting for the light, and getting it right in-camera is the same discipline\nI bring to an interface. gallery coming soon.');
+      print('shot on leica · san francisco & japan. the discipline of composing a frame,\nwaiting for the light, and getting it right in-camera is the same discipline\nI bring to an interface. gallery coming soon.');
     },
     sudo(...args) {
       if (args.join(' ').includes('hire')) {
@@ -101,7 +101,7 @@ export function createTerminal({ openPanel, openStudy, getRenderer, setMotion, g
     histIdx = history.length;
     const [cmd, ...args] = line.toLowerCase().split(/\s+/);
     if (commands[cmd]) commands[cmd](...args);
-    else print(`command not found: ${cmd} — try \`help\``);
+    else print(`command not found: ${cmd}. try \`help\``);
   }
 
   input.addEventListener('keydown', (e) => {

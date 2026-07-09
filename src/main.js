@@ -202,7 +202,7 @@ const term = createTerminal({
   getRenderer: () => renderer,
   setMotion(v) {
     setMotion(v);
-    term.print(v ? 'motion: on' : 'motion: off — the field is frozen.');
+    term.print(v ? 'motion: on' : 'motion: off. the field is frozen.');
   },
   getMotion: () => motionOn,
 });
@@ -216,4 +216,4 @@ if (projects.some((p) => p.id === initial)) openStudy(initial);
 else openPanel(navPanels.includes(initial) ? initial : 'home', { focus: false });
 
 // greet
-term.print('welcome. type `help` — or just start clicking. everything melts.');
+term.print('welcome. type `help`, or just start clicking. everything melts.');

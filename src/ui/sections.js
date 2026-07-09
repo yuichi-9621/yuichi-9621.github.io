@@ -8,7 +8,7 @@ export function renderSections({ onCardHover, openStudy }) {
   // ── work: project index ────────────────────
   const work = document.getElementById('work');
   work.innerHTML = `
-    <h2 class="sec-head" id="work-h"><b>~/work</b> — ${projects.length} case studies</h2>
+    <h2 class="sec-head" id="work-h"><b>~/work</b> · ${projects.length} case studies</h2>
     <div class="cards">
       ${projects
         .map(
@@ -49,7 +49,7 @@ export function renderSections({ onCardHover, openStudy }) {
 
   // ── about ──────────────────────────────────
   document.getElementById('about').innerHTML = `
-    <h2 class="sec-head" id="about-h"><b>~/about</b> — whoami</h2>
+    <h2 class="sec-head" id="about-h"><b>~/about</b> · whoami</h2>
     <div class="prose">
       <p class="lead">${esc(about.headline)}</p>
       ${about.body.map((p) => `<p>${esc(p)}</p>`).join('')}
@@ -80,7 +80,7 @@ export function renderSections({ onCardHover, openStudy }) {
 
   // ── process (double diamond) ───────────────
   document.getElementById('process').innerHTML = `
-    <h2 class="sec-head" id="process-h"><b>~/process</b> — the double diamond</h2>
+    <h2 class="sec-head" id="process-h"><b>~/process</b> · the double diamond</h2>
     <div class="prose">
       <p class="lead">${esc(process.headline)}</p>
       <p>${esc(process.intro)}</p>
@@ -97,7 +97,7 @@ export function renderSections({ onCardHover, openStudy }) {
 
   // ── events ─────────────────────────────────
   document.getElementById('events').innerHTML = `
-    <h2 class="sec-head" id="events-h"><b>~/events</b> — creative tech series</h2>
+    <h2 class="sec-head" id="events-h"><b>~/events</b> · creative tech series</h2>
     <div class="prose">
       <p class="lead">${esc(events.headline)}</p>
       ${events.body.map((p) => `<p>${esc(p)}</p>`).join('')}
@@ -106,7 +106,7 @@ export function renderSections({ onCardHover, openStudy }) {
       ${events.themes
         .map(
           ([n, t, d]) =>
-            `<li><span class="idx">[${esc(n)}]</span><span class="tl-body"><strong>${esc(t)}</strong> — ${esc(d)}</span></li>`
+            `<li><span class="idx">[${esc(n)}]</span><span class="tl-body"><strong>${esc(t)}</strong> · ${esc(d)}</span></li>`
         )
         .join('')}
     </ol>
@@ -114,7 +114,7 @@ export function renderSections({ onCardHover, openStudy }) {
 
   // ── contact ────────────────────────────────
   document.getElementById('contact').innerHTML = `
-    <h2 class="sec-head" id="contact-h"><b>~/contact</b> — open a channel</h2>
+    <h2 class="sec-head" id="contact-h"><b>~/contact</b> · open a channel</h2>
     <div class="prose">
       <p class="lead">Let’s build something worth building.</p>
       <p>Open to product design roles, advisory work, and collaborations at the edge of AI, blockchain, and human experience.</p>
@@ -138,7 +138,7 @@ export function renderStudy(id) {
   const el = document.getElementById('study');
   el.innerHTML = `
     <button class="chip back" type="button" data-back>← back to work</button>
-    <h2 class="sec-head" id="study-h"><b>~/work/${p.id}</b> — ${esc(p.org)} · ${esc(p.year)}</h2>
+    <h2 class="sec-head" id="study-h"><b>~/work/${p.id}</b> · ${esc(p.org)} · ${esc(p.year)}</h2>
     <article class="study">
       <h3 class="study-title">${esc(p.title)}</h3>
       <p class="lede">${esc(p.lede)}</p>
