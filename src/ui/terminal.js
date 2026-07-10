@@ -1,5 +1,6 @@
 import { site, projects } from '../content.js';
 import { lineIn } from './fx.js';
+import { trackEvent } from './track.js';
 
 const SECTIONS = ['home', 'work', 'process', 'about', 'events', 'contact'];
 
@@ -99,6 +100,8 @@ export function createTerminal({ openPanel, openStudy, getRenderer, setMotion, g
     history.push(line);
     histIdx = history.length;
     const [cmd, ...args] = line.toLowerCase().split(/\s+/);
+    // count command *names* only — typed args are never sent anywhere
+    trackEvent(commands[cmd] ? `cmd-${cmd}` : 'cmd-unknown');
     if (commands[cmd]) commands[cmd](...args);
     else print(`command not found: ${cmd}. try \`help\``);
   }

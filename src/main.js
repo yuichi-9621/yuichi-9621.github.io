@@ -7,6 +7,7 @@ import {
   setFxEnabled, panelIn, initPill, movePill,
   attachScramble, initPress, countUpMetrics,
 } from './ui/fx.js';
+import { track } from './ui/track.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -39,6 +40,8 @@ const navPanels = panels.filter((p) => p !== 'study');
 let firstOpen = true;
 
 function openPanel(name, { focus = true } = {}) {
+  // 'study' views are counted with their project id in openStudy instead
+  if (name !== 'study') track(`/panel/${name}`, name);
   for (const p of panels) {
     const el = $(p === 'home' ? 'hero' : p);
     const open = p === name;
@@ -71,6 +74,7 @@ function openPanel(name, { focus = true } = {}) {
 
 function openStudy(id) {
   if (!renderStudy(id)) return false;
+  track(`/study/${id}`, `study: ${id}`);
   openPanel('study');
   history.replaceState(null, '', `#${id}`);
   wireStudy();
