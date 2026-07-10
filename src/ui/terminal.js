@@ -1,6 +1,7 @@
 import { site, projects } from '../content.js';
 import { lineIn } from './fx.js';
 import { trackEvent } from './track.js';
+import { createTraffic } from './traffic.js';
 
 const SECTIONS = ['home', 'work', 'process', 'about', 'events', 'contact'];
 
@@ -79,7 +80,10 @@ export function createTerminal({ openPanel, openStudy, getRenderer, setMotion, g
       getRenderer()?.setLiquid(0);
       print('you are already in it.');
     },
+    // hidden, owner-only: encrypted GoatCounter stats (see src/ui/traffic.js)
+    traffic(...args) { runTraffic(args, rawParts.slice(1)); },
   };
+  const runTraffic = createTraffic(print);
   // project ids as direct commands: `snowx`, `mahola`, `netflix`
   for (const p of projects) {
     commands[p.id] = () => { openStudy(p.id); print(`opening ~/work/${p.id}`); };
@@ -93,12 +97,19 @@ export function createTerminal({ openPanel, openStudy, getRenderer, setMotion, g
     }
   }
 
+  let rawParts = []; // case-preserved words of the current line (traffic passphrase)
+
   function run(raw) {
     const line = raw.trim();
     if (!line) return;
-    print(line, true);
-    history.push(line);
-    histIdx = history.length;
+    // never echo or remember the passphrase line
+    const sensitive = /^traffic\s+key\s/i.test(line);
+    print(sensitive ? 'traffic key ••••••••' : line, true);
+    if (!sensitive) {
+      history.push(line);
+      histIdx = history.length;
+    }
+    rawParts = line.split(/\s+/);
     const [cmd, ...args] = line.toLowerCase().split(/\s+/);
     // count command *names* only — typed args are never sent anywhere
     trackEvent(commands[cmd] ? `cmd-${cmd}` : 'cmd-unknown');
@@ -120,7 +131,7 @@ export function createTerminal({ openPanel, openStudy, getRenderer, setMotion, g
       e.preventDefault();
       const v = input.value.toLowerCase();
       if (!v) return;
-      const match = [...Object.keys(commands)].find((c) => c.startsWith(v));
+      const match = [...Object.keys(commands)].filter((c) => c !== 'traffic').find((c) => c.startsWith(v));
       if (match) input.value = match;
     }
   });

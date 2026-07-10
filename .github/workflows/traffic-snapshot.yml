@@ -1,0 +1,41 @@
+name: Traffic snapshot
+
+# Snapshots GoatCounter stats every 6 hours, encrypts them, and force-pushes
+# the single-file result to the orphan `traffic-data` branch. The site's
+# hidden `traffic` terminal command fetches and decrypts it client-side.
+# Publishing to a data branch (not main) means no deploys and no history noise.
+
+on:
+  schedule:
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Pull stats and encrypt
+        env:
+          GC_API_TOKEN: ${{ secrets.GC_API_TOKEN }}
+          TRAFFIC_PASSPHRASE: ${{ secrets.TRAFFIC_PASSPHRASE }}
+        run: node scripts/traffic-snapshot.mjs
+
+      - name: Publish to traffic-data branch
+        run: |
+          git config user.name "traffic-bot"
+          git config user.email "actions@github.com"
+          mv traffic.enc /tmp/traffic.enc
+          git switch --orphan traffic-data
+          mv /tmp/traffic.enc traffic.enc
+          git add traffic.enc
+          git commit -m "traffic snapshot"
+          git push --force origin traffic-data
