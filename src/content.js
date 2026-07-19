@@ -306,6 +306,12 @@ the problem  <      > ⇄ the real problem ⇄ <      >  worth shipping
 // Smaller projects — shipped fast, no full case study. Add `link` when ready.
 export const sideProjects = [
   {
+    title: 'Allsquare',
+    desc: 'Multi-currency group bill splitter with no sign-up: the shared link is the credential. Designed and built solo, from the passport-stamp identity and component library down to the minimal-transfer settlement engine. Live in production.',
+    tags: ['Live product', 'Solo build', 'PWA'],
+    link: 'https://all-sqr.com',
+  },
+  {
     title: 'SociaLens',
     desc: 'VR social commerce app with unique discovery features, prototyped and delivered. 2 awards from sponsors of ETH Mexico Global Hackathon 2022.',
     tags: ['VR', 'Hackathon', '2 awards'],
