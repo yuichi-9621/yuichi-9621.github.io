@@ -99,23 +99,16 @@ export async function createBadge(canvas, { face, onOpen, reducedMotion }) {
   weave.wrapS = weave.wrapT = RepeatWrapping;
   weave.repeat.set(12, BAND_TILE_H / RIB_PX); // one rib per printed rib
   weave.anisotropy = renderer.capabilities.getMaxAnisotropy();
-  const band = new Mesh(
-    new BufferGeometry(),
-    new MeshPhysicalMaterial({
-      map: bandTex,
-      normalMap: weave,
-      normalScale: new Vector2(0.7, 0.7),
-      roughness: 0.82,
-      sheen: 1,                       // the soft glow polyester gets at a glancing angle
-      sheenRoughness: 0.45,
-      sheenColor: new Color(css('--momo')),
-      side: DoubleSide,
-    })
-  );
-  const pos = new Float32Array((BAND_SAMPLES + 1) * COLS * 3);
-  const uvs = new Float32Array((BAND_SAMPLES + 1) * COLS * 2);
-  band.geometry.setAttribute('position', new BufferAttribute(pos, 3));
-  band.geometry.setAttribute('uv', new BufferAttribute(uvs, 2));
+  const bandMaterial = new MeshPhysicalMaterial({
+    map: bandTex,
+    normalMap: weave,
+    normalScale: new Vector2(0.7, 0.7),
+    roughness: 0.82,
+    sheen: 1,                       // the soft glow polyester gets at a glancing angle
+    sheenRoughness: 0.45,
+    sheenColor: new Color(css('--momo')),
+    side: DoubleSide,
+  });
   const idx = [];
   for (let i = 0; i < BAND_SAMPLES; i++) {
     for (let c = 0; c < COLS - 1; c++) {
@@ -123,8 +116,17 @@ export async function createBadge(canvas, { face, onOpen, reducedMotion }) {
       idx.push(a, a + 1, b, a + 1, b + 1, b);
     }
   }
-  band.geometry.setIndex(idx);
-  scene.add(band);
+  // two strands, the front one and the one behind it, each laid out every frame
+  const strands = [-1, 1].map((which) => {
+    const pos = new Float32Array((BAND_SAMPLES + 1) * COLS * 3);
+    const uvs = new Float32Array((BAND_SAMPLES + 1) * COLS * 2);
+    const mesh = new Mesh(new BufferGeometry(), bandMaterial);
+    mesh.geometry.setAttribute('position', new BufferAttribute(pos, 3));
+    mesh.geometry.setAttribute('uv', new BufferAttribute(uvs, 2));
+    mesh.geometry.setIndex(idx);
+    scene.add(mesh);
+    return { mesh, pos, uvs, ribbon: createRibbon(which) };
+  });
 
   const sim = createSim(new Vector3(0, 4.75, 0)); // high enough that the card still hangs near the middle
   if (reducedMotion) {
@@ -160,16 +162,18 @@ export async function createBadge(canvas, { face, onOpen, reducedMotion }) {
     g.setAttribute('uv', new BufferAttribute(new Float32Array(wu), 2));
     g.setIndex(wi);
     g.computeVertexNormals();
-    card.add(new Mesh(g, band.material));
+    card.add(new Mesh(g, bandMaterial));
   }
 
-  const ribbon = createRibbon();
-  function updateBand() {
-    ribbon.layout(pos, uvs, sim.bandPoints(), card.position, card.quaternion, camera.position);
-    band.geometry.attributes.position.needsUpdate = true;
-    band.geometry.attributes.uv.needsUpdate = true;
-    band.geometry.computeVertexNormals();
-    band.geometry.computeBoundingSphere();
+  function updateBand(dt) {
+    const stretch = sim.ropeLength() / sim.hangLength;
+    for (const { mesh, pos, uvs, ribbon } of strands) {
+      ribbon.layout(pos, uvs, sim.bandPoints(), card.position, card.quaternion, camera.position, dt, stretch);
+      mesh.geometry.attributes.position.needsUpdate = true;
+      mesh.geometry.attributes.uv.needsUpdate = true;
+      mesh.geometry.computeVertexNormals();
+      mesh.geometry.computeBoundingSphere();
+    }
   }
 
   // size: keep the card readable (at least ~320 css px wide when it can be)
@@ -253,7 +257,7 @@ export async function createBadge(canvas, { face, onOpen, reducedMotion }) {
     const p = sim.step(dt);
     card.position.copy(p.position);
     card.quaternion.copy(p.quaternion);
-    updateBand();
+    updateBand(dt);
     renderer.render(scene, camera);
     requestAnimationFrame(frame);
   }

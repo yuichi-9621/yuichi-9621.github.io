@@ -34,13 +34,6 @@ body::before {
   touch-action: none; display: none;
 }
 .gl #badge { display: block; }
-#hint {
-  position: fixed; left: max(var(--space-4), env(safe-area-inset-left, 0px)); top: calc(env(safe-area-inset-top, 0px) + var(--space-4));
-  margin: 0; max-width: 16rem; color: var(--ink);
-  font: 400 0.75rem/1.5 var(--mono); letter-spacing: 0.04em; text-transform: uppercase;
-  display: none;
-}
-.gl #hint { display: block; }
 
 /* ── no WebGL: the nav is the card, under a still band ── */
 #card {

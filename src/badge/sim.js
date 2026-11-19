@@ -11,11 +11,38 @@ export const SEWN = 0.3;        // the stitched double layer above the bar: stif
 const HANG_Y = ANCHOR_Y + SEWN; // the rope hangs the badge from the top of the stitching
 const FRONT = 0.35;             // the front particle sits this far in +z
 const ROPE = 4;                 // rope points below the fixed anchor
-const SEG = 0.55;               // rest length of each rope segment
+const SEG = 0.55;               // length of each rope segment as it hangs with the badge on it
 const GRAVITY = -26;
 const ITER = 12;
+// The lanyard is elastic: pull the badge down and it stretches, let go and it
+// springs back. Each rope segment is a soft spring (it takes back a small share
+// of its stretch per step, which sets how fast it bounces) with a hard limit on
+// how far it can go. Its unloaded length is shorter than SEG, so that with the
+// badge's weight on it the lanyard hangs at the same length as before.
+const SPRING = 0.12;            // share of a segment's stretch it takes back per substep
+const MAX_STRETCH = 1.7;        // a segment never goes past this times its hanging length
+const BOUNCE_DAMP = 0.5;       // how quickly the bounce settles
+
+// The unloaded segment length is found by hanging the badge quietly a few
+// times and shortening the segments by however much they stretched.
+let unloaded = null;
+function calibrate(anchor) {
+  let rest = SEG;
+  for (let n = 0; n < 4; n++) {
+    const probe = build(anchor, rest);
+    let l = 0;
+    for (let i = 0; i < 900; i++) { probe.step(1 / 60); if (i >= 600) l += probe.ropeLength() / 300; }
+    rest -= (l - (ROPE * SEG + 0.2)) / ROPE;
+  }
+  return rest;
+}
 
 export function createSim(anchor) {
+  if (unloaded === null) unloaded = calibrate(anchor);
+  return build(anchor, unloaded);
+}
+
+function build(anchor, rest0) {
   const fixed = anchor.clone();
   const rope = [];
   for (let i = 1; i <= ROPE; i++) rope.push(particle(fixed.x + i * 0.35, fixed.y - i * 0.25, 0));
@@ -29,10 +56,12 @@ export function createSim(anchor) {
   for (const q of body) q.body = true;
   const all = [...rope, ...body];
 
-  const links = [];
+  const springs = [];
   let prev = { p: fixed, pinned: true };
-  for (const r of rope) { links.push([prev, r, SEG, true]); prev = r; }
-  links.push([prev, top, 0.2, true]);
+  for (const r of rope) { springs.push([prev, r, rest0, SEG * MAX_STRETCH]); prev = r; }
+  springs.push([prev, top, 0.2, 0.2]);
+  const kIter = 1 - Math.pow(1 - SPRING, 1 / ITER); // the same share, spread over the solver's passes
+  const links = [];
   for (const [a, b] of [[top, bot], [top, front], [bot, front]]) links.push([a, b, a.p.distanceTo(b.p), false]);
 
   // card-space position of each body particle, for orientation and dragging
@@ -82,17 +111,42 @@ export function createSim(anchor) {
         const d = delta.subVectors(drag.target, grab);
         // the lanyard has a length: don't let the hand pull the clip past it
         const reach = facing.copy(top.p).add(d).sub(fixed);
-        const L = ROPE * SEG + 0.2;
+        const L = ROPE * SEG * MAX_STRETCH + 0.2;
         if (reach.length() > L) d.copy(reach.setLength(L).add(fixed).sub(top.p));
         if (d.length() > 0.2) d.setLength(0.2); // follow fast, but don't teleport
         for (const q of body) { q.prev.copy(q.p); q.p.add(d); } // velocity = this move, so a release throws
       }
       for (let k = 0; k < ITER; k++) {
+        for (const [a, b, rest, max] of springs) stretch(a, b, rest, max);
         for (const [a, b, rest, slack] of links) solve(a, b, rest, slack);
+      }
+      // a little friction inside the elastic, so a bounce dies out in a couple of seconds
+      for (const [a, b] of springs) {
+        const dir = tmp.subVectors(b.p, a.p).normalize();
+        const va = a.pinned ? 0 : delta.subVectors(a.p, a.prev).dot(dir);
+        const vb = delta.subVectors(b.p, b.prev).dot(dir);
+        const rel = (vb - va) * BOUNCE_DAMP;
+        if (!a.pinned && !(drag && a.body)) a.prev.addScaledVector(dir, -rel / 2);
+        if (!(drag && b.body)) b.prev.addScaledVector(dir, rel / 2);
       }
     }
     computePose();
     return pose;
+  }
+
+  // one elastic segment: pulls back a share of any stretch, goes slack when
+  // pushed together, and stops dead at its limit
+  function stretch(a, b, rest, max) {
+    const d = tmp.subVectors(b.p, a.p);
+    const len = d.length() || 1e-6;
+    if (len <= rest) return;
+    let corr = (len - rest) * kIter;
+    if (len - corr > max) corr = len - max;
+    const wa = a.pinned || (drag && a.body) ? 0 : 1, wb = drag && b.body ? 0 : 1;
+    const sum = wa + wb;
+    if (!sum) return;
+    if (wa) a.p.addScaledVector(d, (corr / len) * (wa / sum));
+    if (wb) b.p.addScaledVector(d, (-corr / len) * (wb / sum));
   }
 
   function solve(a, b, rest, slack) {
@@ -115,6 +169,13 @@ export function createSim(anchor) {
     pose,
     // points for drawing the band: fixed anchor, rope, then the clip ring
     bandPoints() { return [fixed, ...rope.map((r) => r.p), top.p]; },
+    // how long the rope runs now, anchor to clip (the stretch shows in the print)
+    ropeLength() {
+      let l = 0, a = fixed;
+      for (const q of [...rope.map((r) => r.p), top.p]) { l += a.distanceTo(q); a = q; }
+      return l;
+    },
+    hangLength: ROPE * SEG + 0.2,
     grab(worldPoint) {
       computePose();
       const inv = pose.quaternion.clone().invert();

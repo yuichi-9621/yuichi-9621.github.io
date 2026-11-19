@@ -4,7 +4,7 @@ import { Vector3, Quaternion, CatmullRomCurve3 } from 'three';
 import { ANCHOR_Y, SEWN } from './sim.js';
 import { BAND_TILE_W, BAND_TILE_H } from './band.js';
 
-export const BAND_W = 0.26;
+export const BAND_W = 0.32;
 export const BAND_TILE = BAND_W * (BAND_TILE_H / BAND_TILE_W); // world length of one print repeat
 export const BAND_SAMPLES = 40;
 // across the band: the middle lies flat and the edges roll back a little,
@@ -16,15 +16,21 @@ const ROLL = BAND_W * 0.07;
 // wraps under it, and runs back up behind itself, sewn down (the box stitch)
 export const WRAP_R = 0.021;     // the bar's wire plus the webbing's thickness
 export { SEWN };
+// A lanyard is one long loop, so two strands come down from the neck. Both ends
+// are sewn together at the clasp; above it the strands part and run up and out
+// of view toward the neck. The back strand sits just behind the front one.
+const SPREAD = 0.9;    // how far each strand has moved sideways by the time it reaches the neck
+const BEHIND = 0.012;  // how far the back strand sits behind the front one
 
 const TAU = Math.PI * 2;
 const wrapPi = (a) => a - TAU * Math.round(a / TAU);
 const ease = (x) => { x = Math.min(1, Math.max(0, x)); return x * x * (3 - 2 * x); };
 
-export function createRibbon() {
+// strand: -1 for the front strand, +1 for the one behind it
+export function createRibbon(strand = -1) {
   const curve = new CatmullRomCurve3([], false, 'centripetal');
   const tan = new Vector3(), side = new Vector3(), view = new Vector3(), back = new Vector3();
-  const cardSide = new Vector3(), cardUp = new Vector3(), cross = new Vector3(), d = new Vector3();
+  const cardSide = new Vector3(), cardUp = new Vector3(), cardFwd = new Vector3(), cross = new Vector3(), d = new Vector3();
   const sewnTop = new Vector3(), sewnEnd = new Vector3();
   const twist = new Quaternion();
   let endAng = 0; // the twist at the clasp, carried frame to frame so it never flips
@@ -51,13 +57,17 @@ export function createRibbon() {
   let cam = null;
   const curveTangent = (k) => curve.getTangentAt(k, tan);
 
-  // simPoints: fixed anchor, rope points, clip point. Writes positions and uvs.
-  function layout(pos, uvs, simPoints, cardPos, cardQuat, cameraPos, dt = 1 / 60) {
+  // simPoints: fixed anchor, rope points, clip point. stretch: how far the
+  // elastic is pulled past its hanging length (1 at rest). Writes positions and uvs.
+  function layout(pos, uvs, simPoints, cardPos, cardQuat, cameraPos, dt = 1 / 60, stretch = 1) {
     cam = cameraPos;
     cardUp.set(0, 1, 0).applyQuaternion(cardQuat);
+    cardFwd.set(0, 0, 1).applyQuaternion(cardQuat);
     cardSide.set(-1, 0, 0).applyQuaternion(cardQuat); // where ACROSS +1 lies on the bar
-    sewnTop.set(0, ANCHOR_Y + SEWN, WRAP_R).applyQuaternion(cardQuat).add(cardPos);
-    sewnEnd.set(0, ANCHOR_Y, WRAP_R).applyQuaternion(cardQuat).add(cardPos);
+    const z = strand < 0 ? WRAP_R : WRAP_R - BEHIND * 0.6;
+    sewnTop.set(0, ANCHOR_Y + SEWN, z).applyQuaternion(cardQuat).add(cardPos);
+    // the back strand's sewn end stops short of the bar, hidden behind the front one
+    sewnEnd.set(0, strand < 0 ? ANCHOR_Y : ANCHOR_Y + SEWN * 0.4, z).applyQuaternion(cardQuat).add(cardPos);
 
     // the rope hangs the badge from the top of the stitched part (see sim.js),
     // which lies straight along the card down to the front of the loop's bar
@@ -70,6 +80,16 @@ export function createRibbon() {
       // thrown up, the rope gone slack) would fold the band back on itself
       const above = d.subVectors(q, sewnTop).dot(cardUp);
       if (q.distanceTo(path[path.length - 1]) > 0.04 && q.distanceTo(sewnTop) > 0.06 && above > 0.05) path.push(q.clone());
+    }
+    // part the strands: none at the stitching, the full spread at the neck
+    // (when the badge is lifted toward the neck the strands close up, as they
+    // would, rather than running in sideways to the clasp)
+    const neckY = simPoints[0].y, joinY = sewnTop.y;
+    const open = Math.min(1, Math.max(0, (neckY - joinY) / 2.4));
+    for (const q of path) {
+      const t = Math.min(1, Math.max(0, (q.y - joinY) / Math.max(0.5, neckY - joinY)));
+      q.x += strand * SPREAD * open * t;
+      if (strand > 0) q.addScaledVector(cardFwd, -BEHIND * (1 - t));
     }
     path.push(sewnTop.clone(), sewnEnd.clone());
     if (lastCount !== -1 && path.length !== lastCount) settle = 0.8;
@@ -115,8 +135,10 @@ export function createRibbon() {
       if (ang !== 0) side.applyQuaternion(twist.setFromAxisAngle(tan, ang));
       side.multiplyScalar(BAND_W / 2);
       back.crossVectors(side, tan).normalize(); // the band's own normal
-      // print runs down from the top; measured from the clasp end so it doesn't crawl as the band stretches
-      const v = (len - k * len) / BAND_TILE;
+      // print runs down from the top, measured from the clasp end so it stays
+      // put there; above the stitching it stretches along with the elastic
+      const fromClasp = len - k * len;
+      const v = (fromClasp <= SEWN ? fromClasp : SEWN + (fromClasp - SEWN) / stretch) / BAND_TILE;
       const rollK = 1 - turn; // the sewn end lies flat
       for (let c = 0; c < COLS; c++) {
         const a = ACROSS[c];

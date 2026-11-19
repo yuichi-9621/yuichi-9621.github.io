@@ -190,7 +190,7 @@ bpy.ops.object.modifier_apply(modifier='b')
 parts.append(collar)
 # the webbing loop: a flat rounded bar loop facing you, wide enough for the
 # lanyard to wrap over its top bar (a narrow ring would pinch the webbing)
-LW, LH, LR, LWIRE = 0.32, 0.11, 0.035, 0.012
+LW, LH, LR, LWIRE = 0.38, 0.11, 0.035, 0.012
 loop_y0 = neck_y0 + 0.11 + LWIRE                    # bottom bar sits on the swivel
 loop_pts = [(x, y + loop_y0 + LH / 2, 0) for x, y in rounded_rect(LW, LH, LR, 8)]
 webloop = rod('webloop', loop_pts, LWIRE)
