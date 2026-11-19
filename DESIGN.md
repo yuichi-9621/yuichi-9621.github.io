@@ -68,17 +68,15 @@ Face fill ai. Text cotton, left aligned at x=96. Destination labels right aligne
 | Top line | DESIGN ENGINEER (left), SAN FRANCISCO (right) | baseline y=264 | mono 26, 0.06em, cotton-dim | none |
 | Name | Yuichi / Okuhama | baselines y=560, 712 | 144, 700 | About |
 | Hairline | | y=808 | | |
-| Company | DG717 | baseline y=900 | 56, 400 | Work |
+| Work | Work | baseline y=900 | 56, 400 | Work |
 | Hairline | | y=952 | | |
-| Built | Things I built | baseline y=1044 | 56, 400 | Built |
+| Contact | Say hello | baseline y=1044 | 56, 400 | Contact |
 | Hairline | | y=1096 | | |
-| Contact | Say hello | baseline y=1188 | 56, 400 | Contact |
-| Hairline | | y=1240 | | |
 | Bottom line | FROM OKINAWA, JAPAN | baseline y=1344 | mono 26, 0.06em, cotton-dim | none |
 
-Hit areas span x 64 to 960. Name: y 408 to 784. Rows: 808 to 952, 952 to 1096, 1096 to 1240. Each row is 144 px, which is 45 CSS px when the badge renders 320 px wide. Don't render it narrower.
+Hit areas span x 64 to 960. Name: y 408 to 784. Rows: 808 to 952, 952 to 1096. The space below stays empty on purpose. Each row is 144 px, which is 45 CSS px when the badge renders 320 px wide. Don't render it narrower.
 
-Each clickable line carries its destination word (about, work, built, contact) at x=928 on the same baseline (name: y=712), 28 px, cotton-dim.
+Each clickable line carries its destination word (about, work, contact) at x=928 on the same baseline (name: y=712), 28 px, cotton-dim.
 
 Hover or focus: line text and destination word turn yamabuki, and a 16 x 16 yamabuki square appears at x=56, centered on the line. Keyboard focus adds a 4 px yamabuki outline around the hit area, inset 8 px. Redraw the texture on state change, 120 ms. Cursor is `pointer`. A press that moves under 6 px is a click, anything more is a drag.
 
@@ -110,7 +108,7 @@ Reduced motion: the badge hangs still, facing front, with no drop-in and no idle
 
 ## 10. Accessibility
 
-- A real `<nav>` sits first in the DOM with four buttons in badge order: About, Work, Built, Contact. With WebGL it is visually hidden but focusable. Focusing a button turns the badge to its front and draws that line's focus state.
+- A real `<nav>` sits first in the DOM with three buttons in badge order: About, Work, Contact. With WebGL it is visually hidden but focusable. Focusing a button turns the badge to its front and draws that line's focus state.
 - Tab order: skip link, the four buttons, then the open sheet. Enter or Space opens. The sheet traps focus and moves it to its title.
 - Focus ring in the DOM: 2 px purple, 3 px offset. On the badge: yamabuki, as above.
 - State is never color alone. The square marker carries it too.

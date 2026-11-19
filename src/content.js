@@ -232,7 +232,7 @@ export const about = {
   headline: 'Hi, I’m Yuichi.',
   body: [
     'I grew up in Okinawa, studied HCI at UC Irvine, and live in San Francisco. I like problems where something powerful is hard to use: blockchain contracts, VR, and now AI tools. My job is finding the version that makes sense the first time you touch it, and more and more, I build that version myself.',
-    'By day I run DG717, a venue and coworking space at 717 Market Street, where I host events for AI startups and developer communities. Growing up around Japanese craft left me with one simple belief: everyday things should be a quiet pleasure to use.',
+    'By day I run a venue and coworking space in San Francisco, where I host events for AI startups and developer communities. Growing up around Japanese craft left me with one simple belief: everyday things should be a quiet pleasure to use.',
   ],
   human:
     'Tools that write code keep getting better. Deciding what’s worth building, and how it should feel in someone’s hands, is still a human job. That’s the part I care about most.',
@@ -242,7 +242,7 @@ export const about = {
     ['Ship it', 'I take ideas from a sketch to working code, and I’m happy in the repo next to engineers.'],
   ],
   timeline: [
-    ['now', 'DG717', 'Running a venue and event space for AI and developer communities in San Francisco.'],
+    ['now', 'Venue and events', 'Running a venue and event space for AI and developer communities in San Francisco.'],
     ['2026', 'Allsquare', 'Designed and built a bill splitter with no sign up. Live at all-sqr.com.'],
     ['2023-24', 'mahola at Crypto Garage', 'Enterprise Web3 tools: no-code contract creation and real-time transaction analysis.'],
     ['2022', 'Netflix UI/UX Bootcamp', 'Foundational and Advanced tracks, a full year of human-centered research and design methods. The origin of the Netflix case study.'],
@@ -266,7 +266,7 @@ export const about = {
 
 
 
-// Things designed and built end to end. Shown first, in the BUILT panel.
+// Things designed and built end to end. Shown in the Work sheet, after the case studies.
 export const built = {
   headline: 'Things I designed and then built myself.',
   intro: 'Both are live. I did the design and wrote the code.',

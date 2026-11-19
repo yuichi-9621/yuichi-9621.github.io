@@ -29,6 +29,20 @@ const pages = {
         )
         .join('')}
     </ul>
+    <h3>Things I built</h3>
+    <p>${esc(built.intro)}</p>
+    ${built.items
+      .map(
+        (b) => `<section class="item">
+          <h4>${esc(b.title)}</h4>
+          <p>${esc(b.desc)}</p>
+          <p class="quiet">${esc(b.stack.join(' · '))}</p>
+          <p class="links">${b.links.map(([l, u]) => ext(u, `${esc(l)}<span class="visually-hidden"> (${esc(b.title)})</span>`)).join('')}</p>
+        </section>`
+      )
+      .join('')}
+    <h4>${esc(built.craft.title)}</h4>
+    <ul class="list plain">${built.craft.points.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
     <h3>Also shipped</h3>
     <ul class="list shipped">
       ${sideProjects
@@ -39,21 +53,6 @@ const pages = {
         .join('')}
     </ul>`,
 
-  built: () => `
-    <h2 id="sheet-title">${esc(built.headline)}</h2>
-    <p>${esc(built.intro)}</p>
-    ${built.items
-      .map(
-        (b) => `<section class="item">
-          <h3>${esc(b.title)}</h3>
-          <p>${esc(b.desc)}</p>
-          <p class="quiet">${esc(b.stack.join(' · '))}</p>
-          <p class="links">${b.links.map(([l, u]) => ext(u, `${esc(l)}<span class="visually-hidden"> (${esc(b.title)})</span>`)).join('')}</p>
-        </section>`
-      )
-      .join('')}
-    <h3>${esc(built.craft.title)}</h3>
-    <ul class="list plain">${built.craft.points.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`,
 
   contact: () => `
     <h2 id="sheet-title">Say hello</h2>
@@ -93,7 +92,7 @@ function study(id) {
     <p>${esc(p.reflection)}</p>`;
 }
 
-export const PAGES = ['about', 'work', 'built', 'contact'];
+export const PAGES = ['about', 'work', 'contact'];
 
 export function createSheet({ onChange }) {
   const dlg = document.getElementById('sheet');

@@ -10,8 +10,7 @@ const RIGHT = 928;      // destination labels align here
 export const LINES = [
   { id: 'about', label: 'about', y0: 408, y1: 784 },
   { id: 'work', label: 'work', y0: 808, y1: 952 },
-  { id: 'built', label: 'built', y0: 952, y1: 1096 },
-  { id: 'contact', label: 'contact', y0: 1096, y1: 1240 },
+  { id: 'contact', label: 'contact', y0: 952, y1: 1096 },
 ];
 
 const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
@@ -21,8 +20,8 @@ export async function loadFaceFonts() {
   try {
     await Promise.all([
       document.fonts.load(`700 144px ${sans}`, 'Yuichi Okuhama 奥浜引き算'),
-      document.fonts.load(`400 56px ${sans}`, 'DG717 Things I built Say hello'),
-      document.fonts.load(`400 28px ${mono}`, 'DESIGN ENGINEER SAN FRANCISCO FROM OKINAWA about work built contact'),
+      document.fonts.load(`400 56px ${sans}`, 'Work Say hello'),
+      document.fonts.load(`400 28px ${mono}`, 'DESIGN ENGINEER SAN FRANCISCO FROM OKINAWA about work contact'),
     ]);
   } catch {
     /* the system fallback still draws */
@@ -72,13 +71,12 @@ export function drawFront(ctx, { name, role, company, place, active = null, focu
 
   // hairlines
   ctx.fillStyle = c.hair;
-  for (const y of [808, 952, 1096, 1240]) ctx.fillRect(M, y - 1, RIGHT - M, 2);
+  for (const y of [808, 952, 1096]) ctx.fillRect(M, y - 1, RIGHT - M, 2);
 
-  // the three rows
+  // the two rows under the name
   const rows = [
     ['work', company, 900],
-    ['built', 'Things I built', 1044],
-    ['contact', 'Say hello', 1188],
+    ['contact', 'Say hello', 1044],
   ];
   for (const [id, label, y] of rows) {
     text(label, M, y, 56, 400, tone(id));

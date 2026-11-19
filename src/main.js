@@ -41,7 +41,7 @@ if (hasGL) {
   import('./badge/scene.js')
     .then(({ createBadge }) =>
       createBadge(canvas, {
-        face: { name: site.name, role: site.role, company: 'DG717', place: site.location },
+        face: { name: site.name, role: site.role, company: 'Work', place: site.location },
         reducedMotion,
         onOpen: (key) => sheet.open(key, buttonFor(key)),
       })
@@ -63,8 +63,8 @@ if (hasGL) {
   showPreviewNote('3D badge off: this browser has no WebGL');
 }
 
-// deep links: #about, #work, #built, #contact, or a case study (#snowx)
-const initial = location.hash.slice(1);
+// deep links: #about, #work, #contact, or a case study (#snowx). Old #built links open Work.
+const initial = location.hash.slice(1) === 'built' ? 'work' : location.hash.slice(1);
 if (PAGES.includes(initial) || projects.some((p) => p.id === initial)) sheet.open(initial, buttonFor(initial) || buttonFor('work'));
 else track('/', 'home');
 
