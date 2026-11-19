@@ -90,9 +90,9 @@ The card itself is thick glossy PVC (0.032 units, bevelled edges): a clear coat 
 
 ## 7. Lanyard and fittings
 
-Woven vermilion webbing 0.26 units wide: dark red selvedge edges with a fine twill, a purple pinstripe inside each edge, and a printed intro running down it: YUICHI OKUHAMA, DESIGN ENGINEER, SAN FRANCISCO, FROM OKINAWA in mono turned sideways, then 引き算 standing upright (tategaki), with purple dots between. The weave is drawn over the print so the ribs run through the letters, a small normal map gives each rib depth, sheen gives polyester's soft glow, and the edges roll back a little. The end that wraps the clasp loop is sewn down with a box-X stitch. One 4096 px tile is longer than the band, so the stitch shows once and the print never visibly repeats. Near the clasp the band turns with the card.
+Woven vermilion webbing 0.26 units wide: dark red selvedge edges with a fine twill, a purple pinstripe inside each edge, and a printed intro running down it: YUICHI OKUHAMA, DESIGN ENGINEER, SAN FRANCISCO, FROM OKINAWA in mono turned sideways, then 引き算 standing upright (tategaki), with purple dots between. The weave is drawn over the print so the ribs run through the letters, a small normal map gives each rib depth, sheen gives polyester's soft glow, and the edges roll back a little. The end comes down over the loop's top bar, wraps under it and runs back up behind itself, sewn down with a box-X stitch through both layers. One 4096 px tile is longer than the band, so the stitch shows once and the print never visibly repeats. Near the clasp the band turns with the card.
 
-Fittings, modeled in `tools/badge.py`, polished steel: a jump ring through the slot; a lobster clasp hooked on it, pressed as one chunky claw with a small egg-shaped hole, a thinner spring gate with hairline seams, and a ridged trigger tab; a tapered neck and swivel collar; and a flat rounded webbing loop on top, wide enough for the lanyard to wrap.
+Fittings, modeled in `tools/badge.py`, polished steel: a tall oval link through the slot, so the clasp hangs clear of the card's top edge; a lobster clasp hooked on it, pressed as one chunky claw with a small egg-shaped hole, a thinner spring gate with hairline seams, and a ridged trigger tab; a tapered neck and swivel collar; and a flat rounded webbing loop on top, wide enough for the lanyard to wrap.
 
 ## 8. Sheet
 

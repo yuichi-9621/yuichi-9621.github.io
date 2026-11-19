@@ -97,15 +97,17 @@ def ring(name, cy, major, minor, plane='YZ', n=48):
 
 parts = []
 # jump ring: stands across the card so it passes through the slot
-JR = 0.075
-jump = ring('jump', SY + JR, JR, 0.011)
+# an oval link, tall enough that the clasp hangs clear of the card's top edge
+JR, JA = 0.06, 0.17          # half width (across the card) and half height
+jump = rod('jump', [(0, SY + JA - JA * math.cos(2 * math.pi * i / 56), JR * math.sin(2 * math.pi * i / 56))
+                    for i in range(56)], 0.011)
 parts.append(jump)
 # lobster clasp, built like the real thing: a chunky pressed claw with a
 # small eye-shaped hole, thick along the back, a thin spring gate closing the
 # left side, a ridged trigger tab on the gate, a tapered neck, and a small
 # swivel ring the lanyard loops through.
 CB_BEV = 0.018                       # the rounded edge that softens every outline
-cb = SY + 2 * JR - 0.011 - CB_BEV - 0.03   # claw bottom: the jump ring rests in its hole
+cb = SY + 2 * JA - 0.011 - CB_BEV - 0.03   # claw bottom: the jump ring rests in its hole
 HO = 0.40                            # claw height (outline, before the rounded edge)
 
 def rod_tapered(name, pts, radii, flat=1.0, closed=False):
