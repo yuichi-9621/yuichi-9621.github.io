@@ -19,6 +19,13 @@ export const site = {
 };
 
 // Full case studies, structured by the Double Diamond.
+// How I design, in my own words. Shown first on the Work page.
+export const beliefs = [
+  ['Design serves both sides', 'A design is a feature that, once it’s real, satisfies its stakeholders: the people who use it and the business behind it.'],
+  ['Take away until it’s clear', '引き算, the art of subtraction. Growing up in Japan taught me that the best version is often the one with less in it.'],
+  ['Go wide, then narrow', 'I work in a double diamond. First I explore to find the right problem and narrow it down, then explore again to find the right solution.'],
+];
+
 export const projects = [
   {
     id: 'snowx',

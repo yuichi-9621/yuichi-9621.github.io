@@ -130,6 +130,8 @@ blockquote { margin: var(--space-4) 0; padding-left: var(--space-3); border-left
 }
 .row strong { display: block; }
 .row .quiet { display: block; margin-top: var(--space-1); }
+.beliefs > li { display: block; padding: var(--space-3) 0; }
+.beliefs .quiet { display: block; margin-top: var(--space-1); }
 .shipped > li { padding: var(--space-3) 0; }
 .shipped strong { display: block; }
 .shipped .quiet { display: block; margin-top: var(--space-1); }

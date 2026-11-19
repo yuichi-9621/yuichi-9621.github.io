@@ -1,6 +1,6 @@
 // The one sheet that opens over the badge (DESIGN.md §8).
 // A native <dialog>: it traps focus, closes on Esc, and returns focus.
-import { site, projects, about, built, sideProjects } from './content.js';
+import { site, projects, about, built, sideProjects, beliefs } from './content.js';
 
 const esc = (s) =>
   String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -19,6 +19,11 @@ const pages = {
 
   work: () => `
     <h2 id="sheet-title">Work</h2>
+    <h3>How I design</h3>
+    <ol class="list beliefs">
+      ${beliefs.map(([t, d]) => `<li><strong>${esc(t)}</strong><span class="quiet">${esc(d)}</span></li>`).join('')}
+    </ol>
+    <h3>Case studies</h3>
     <ul class="list rows">
       ${projects
         .map(
