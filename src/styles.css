@@ -129,6 +129,9 @@ blockquote { margin: var(--space-4) 0; padding-left: var(--space-3); border-left
 }
 .row strong { display: block; }
 .row .quiet { display: block; margin-top: var(--space-1); }
+.shipped > li { padding: var(--space-3) 0; }
+.shipped strong { display: block; }
+.shipped .quiet { display: block; margin-top: var(--space-1); }
 .row:hover strong { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--accent); }
 .back { color: var(--ink-dim); margin-bottom: var(--space-4); min-height: var(--hit-min); }
 .back:hover { color: var(--ink); }

@@ -303,20 +303,20 @@ export const built = {
 export const sideProjects = [
   {
     title: 'SociaLens',
-    desc: 'VR social commerce app with unique discovery features, prototyped and delivered. 2 awards from sponsors of ETH Mexico Global Hackathon 2022.',
-    tags: ['VR', 'Hackathon', '2 awards'],
+    kind: 'hackathon',
+    desc: 'A social shopping app in VR, prototyped at ETH Mexico 2022. Won 2 sponsor awards.',
     link: '',
   },
   {
     title: 'XrossLend',
-    desc: 'Lend and rent NFTs across chains. Designed the core flows alongside 3 developers. 6 awards from sponsors of ETH NYC Global Hackathon 2022.',
-    tags: ['Web3', 'Hackathon', '6 awards'],
+    kind: 'hackathon',
+    desc: 'Lend and rent NFTs across chains. I designed the core flows with 3 developers at ETH NYC 2022. Won 6 sponsor awards.',
     link: '',
   },
   {
     title: 'Halfway to Home Dog Rescue',
-    desc: 'Self-initiated redesign of a dog-rescue site, cutting bounce between pages and smoothing the path to finding your favorite furry friend.',
-    tags: ['Case study', 'Nonprofit'],
+    kind: 'redesign',
+    desc: 'A redesign I took on myself for a dog rescue’s site, with fewer dead ends between pages and a clearer path to finding a dog.',
     link: '',
   },
 ];

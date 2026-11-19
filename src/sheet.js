@@ -30,8 +30,13 @@ const pages = {
         .join('')}
     </ul>
     <h3>Also shipped</h3>
-    <ul class="list">
-      ${sideProjects.map((p) => `<li><span><strong>${esc(p.title)}</strong> ${esc(p.desc)}</span></li>`).join('')}
+    <ul class="list shipped">
+      ${sideProjects
+        .map(
+          (p) => `<li><span class="when">${esc(p.kind)}</span>
+            <span><strong>${p.link ? ext(p.link, esc(p.title)) : esc(p.title)}</strong><span class="quiet">${esc(p.desc)}</span></span></li>`
+        )
+        .join('')}
     </ul>`,
 
   built: () => `
