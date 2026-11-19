@@ -1,41 +1,52 @@
 /*
  * tokens.css
  * Design tokens for yuichiokuhama.com. Spec lives in /DESIGN.md.
- * Principle: 引き算 (subtraction). Four bingata colors, one job each.
- * Hex values are sampled from 19th century Ryukyu bingata robes.
- *
- * Fonts (install, then import once in the entry stylesheet):
- *   npm i @fontsource/zen-kaku-gothic-new
- *   @import '@fontsource/zen-kaku-gothic-new/400.css';
- *   @import '@fontsource/zen-kaku-gothic-new/700.css';
+ * Principle: 引き算 (subtraction). The colors come from one kiiro bingata
+ * robe: its yellow ground, vermilion, dark red, pink, and the purple sash.
+ * Fonts are in fonts.css (IBM Plex Sans JP and IBM Plex Mono).
  *
  * Canvas 2D cannot read CSS variables. Read them once with
  * getComputedStyle(document.documentElement).getPropertyValue('--ai').
  */
 
 :root {
-  /* color: sampled */
-  --cotton: #dfddd2; /* ground: page and sheet */
-  --ai: #1e4553;     /* ink on cotton, and the badge face. 7.59:1 on cotton */
-  --ochre: #d7ba5d;  /* active state on the badge only. 5.45:1 on ai */
-  --beni: #cf574e;   /* lanyard band only. 3.01:1 on cotton */
+  /* color: sampled from a kiiro (yellow ground) bingata robe and its sash */
+  --kiiro: #e6a94f;      /* ground: the page, under the waves */
+  --kiiro-deep: #d38a3b; /* kumadori shading in the waves */
+  --ai: #1e4553;         /* the badge face, and ink on paper. 5.0:1 on kiiro */
+  --ai-deep: #15323d;    /* badge edge and shadowed metal */
+  --asagi: #3f8fae;      /* wave body */
+  --mizu: #a9d6e0;       /* wave crest */
+  --shu: #c4382a;        /* the lanyard. the robe's vermilion */
+  --bengara: #8c3324;    /* lanyard shade and its print. the robe's dark red */
+  --momo: #eaa7b0;       /* the robe's pink. a highlight, used rarely */
+  --murasaki: #45247a;   /* the sash purple. the accent, used sometimes */
+  --sumi: #2a1a1f;       /* outlines in the waves */
+  --paper: #f4ecd9;      /* the sheet, and ink on the badge */
+  --cotton: #f1ead6;     /* type on the badge. 8.6:1 on ai */
+  --yamabuki: #f0c46e;   /* active line on the badge. 6.3:1 on ai */
 
-  /* color: derived (mixes of the above, no new hues) */
-  --ai-dim: #45636c;     /* secondary text on cotton. ai 80% + cotton 20%. 4.74:1 */
-  --cotton-dim: #afb7b2; /* secondary text on the badge. cotton 75% + ai 25%. 5.04:1 on ai */
-  --hairline-on-cotton: rgb(30 69 83 / 0.2);
-  --hairline-on-ai: rgb(223 221 210 / 0.25);
-  --scrim: rgb(30 69 83 / 0.24);
+  /* color: derived */
+  --ai-dim: #4f6670;     /* secondary text on paper. 5.2:1 */
+  --cotton-dim: #b4bfba; /* secondary text on the badge. 5.5:1 on ai */
+  --hairline-on-cotton: rgb(30 69 83 / 0.18);
+  --hairline-on-ai: rgb(241 234 214 / 0.22);
+  --scrim: rgb(42 26 31 / 0.28);
 
   /* roles */
-  --bg: var(--cotton);
+  --bg: var(--kiiro);
+  --sheet-bg: var(--paper);
   --ink: var(--ai);
   --ink-dim: var(--ai-dim);
-  --focus: var(--ai);          /* focus ring on cotton */
-  --focus-on-ai: var(--ochre); /* focus ring on the badge */
+  --accent: var(--murasaki);   /* links and markers in the sheet */
+  --focus: var(--murasaki);    /* focus ring on paper and kiiro */
+  --focus-on-ai: var(--yamabuki);
+  --ochre: var(--yamabuki);    /* face.js reads this for the active line */
+  --beni: var(--shu);          /* face.js and scene.js read this for the band */
 
   /* type */
-  --font: 'Zen Kaku Gothic New', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', system-ui, sans-serif;
+  --font: 'IBM Plex Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
   --weight-regular: 400;
   --weight-bold: 700;
   --text-caption: 0.8125rem; /* 13px */

@@ -2,15 +2,17 @@
 import {
   WebGLRenderer, Scene, PerspectiveCamera, CanvasTexture, SRGBColorSpace, MeshPhysicalMaterial,
   MeshStandardMaterial, Color, Raycaster, Vector2, Vector3, Plane, BufferGeometry, BufferAttribute,
-  Mesh, DoubleSide, CatmullRomCurve3, PMREMGenerator, DirectionalLight, AmbientLight,
+  Mesh, DoubleSide, CatmullRomCurve3, PMREMGenerator, DirectionalLight, AmbientLight, RepeatWrapping,
 } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { createSim } from './sim.js';
 import { FACE_W, FACE_H, drawFront, drawBack, lineAt, loadFaceFonts } from './face.js';
+import { BAND_TILE_W, BAND_TILE_H, drawBand } from './band.js';
 
 const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-const BAND_W = 0.16;
+const BAND_W = 0.22;
+const BAND_TILE = BAND_W * (BAND_TILE_H / BAND_TILE_W); // world length of one print repeat
 const BAND_SAMPLES = 32;
 
 // Fetch the model as plain bytes and parse it here, so no data: URLs are ever
@@ -41,9 +43,9 @@ export async function createBadge(canvas, { face, onOpen, reducedMotion }) {
   const camera = new PerspectiveCamera(25, 1, 0.1, 100);
   camera.position.set(0, 0, 13);
   scene.environment = new PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
-  scene.add(new AmbientLight(0xffffff, 0.6));
-  const key = new DirectionalLight(0xffffff, 1.4);
-  key.position.set(-3, 4, 6);
+  scene.add(new AmbientLight(0xffffff, 0.45));
+  const key = new DirectionalLight(0xfff4e0, 1.6); // warm, from the upper left, so the coat catches a highlight
+  key.position.set(-3, 5, 6);
   scene.add(key);
 
   // faces
@@ -69,30 +71,38 @@ export async function createBadge(canvas, { face, onOpen, reducedMotion }) {
   const card = gltf.scene;
   const ai = new Color(css('--ai'));
   let frontMesh = null;
+  // the card is thick glossy PVC: a coat over the print, soft rounded edges
+  const plastic = { roughness: 0.42, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.06, specularIntensity: 0.7 };
   card.traverse((o) => {
     if (!o.isMesh) return;
     const name = o.material.name;
     if (name === 'face' || name === 'back') {
-      o.material = new MeshPhysicalMaterial({
-        map: name === 'face' ? frontTex : backTex,
-        roughness: 0.55, metalness: 0, clearcoat: 0.6, clearcoatRoughness: 0.35,
-      });
+      o.material = new MeshPhysicalMaterial({ map: name === 'face' ? frontTex : backTex, ...plastic });
       if (name === 'face') frontMesh = o;
     } else if (name === 'edge') {
-      o.material = new MeshStandardMaterial({ color: ai, roughness: 0.6 });
+      o.material = new MeshPhysicalMaterial({ color: new Color(css('--ai-deep')), ...plastic });
     } else {
-      o.material = new MeshStandardMaterial({ color: ai, metalness: 0.6, roughness: 0.32 });
+      // the fittings: polished steel
+      o.material = new MeshStandardMaterial({ color: 0xd2d2cc, metalness: 1, roughness: 0.26 });
     }
   });
   scene.add(card);
 
-  // lanyard: a flat ribbon that faces the camera
+  // lanyard: a flat printed ribbon that faces the camera
+  const bandCanvas = Object.assign(document.createElement('canvas'), { width: BAND_TILE_W, height: BAND_TILE_H });
+  drawBand(bandCanvas.getContext('2d'));
+  const bandTex = new CanvasTexture(bandCanvas);
+  bandTex.colorSpace = SRGBColorSpace;
+  bandTex.wrapT = RepeatWrapping;
+  bandTex.anisotropy = renderer.capabilities.getMaxAnisotropy();
   const band = new Mesh(
     new BufferGeometry(),
-    new MeshStandardMaterial({ color: new Color(css('--beni')), roughness: 0.8, side: DoubleSide })
+    new MeshStandardMaterial({ map: bandTex, roughness: 0.85, side: DoubleSide })
   );
   const pos = new Float32Array((BAND_SAMPLES + 1) * 2 * 3);
+  const uvs = new Float32Array((BAND_SAMPLES + 1) * 2 * 2);
   band.geometry.setAttribute('position', new BufferAttribute(pos, 3));
+  band.geometry.setAttribute('uv', new BufferAttribute(uvs, 2));
   const idx = [];
   for (let i = 0; i < BAND_SAMPLES; i++) {
     const a = i * 2;
@@ -113,14 +123,20 @@ export async function createBadge(canvas, { face, onOpen, reducedMotion }) {
     curve.points = sim.bandPoints().map((p) => p.clone());
     curve.updateArcLengths(); // the cache would otherwise keep last frame's lengths
     const pts = curve.getSpacedPoints(BAND_SAMPLES);
+    const len = curve.getLength();
     for (let i = 0; i <= BAND_SAMPLES; i++) {
       const p = pts[i];
       curve.getTangentAt(i / BAND_SAMPLES, tan);
       view.subVectors(camera.position, p).normalize();
       side.crossVectors(tan, view).normalize().multiplyScalar(BAND_W / 2);
       pos.set([p.x - side.x, p.y - side.y, p.z - side.z, p.x + side.x, p.y + side.y, p.z + side.z], i * 6);
+      // print runs down from the top; measured from the card end so it doesn't crawl as the band stretches
+      // u: 1 on the screen-right edge so the words read top to bottom, tops to the right
+      const v = (len - (i / BAND_SAMPLES) * len) / BAND_TILE;
+      uvs.set([1, v, 0, v], i * 4);
     }
     band.geometry.attributes.position.needsUpdate = true;
+    band.geometry.attributes.uv.needsUpdate = true;
     band.geometry.computeVertexNormals();
     band.geometry.computeBoundingSphere();
   }

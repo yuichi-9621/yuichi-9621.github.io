@@ -17,11 +17,12 @@ export const LINES = [
 const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
 export async function loadFaceFonts() {
-  const fam = '"Zen Kaku Gothic New"';
+  const sans = '"IBM Plex Sans JP"', mono = '"IBM Plex Mono"';
   try {
     await Promise.all([
-      document.fonts.load(`700 144px ${fam}`, 'Yuichi Okuhama 奥浜'),
-      document.fonts.load(`400 56px ${fam}`, 'DESIGN ENGINEER DG717 Things I built Say hello San Francisco about work contact 引き算'),
+      document.fonts.load(`700 144px ${sans}`, 'Yuichi Okuhama 奥浜引き算'),
+      document.fonts.load(`400 56px ${sans}`, 'DG717 Things I built Say hello'),
+      document.fonts.load(`400 28px ${mono}`, 'DESIGN ENGINEER SAN FRANCISCO FROM OKINAWA about work built contact'),
     ]);
   } catch {
     /* the system fallback still draws */
@@ -36,15 +37,15 @@ export function lineAt(x, y) {
 export function drawFront(ctx, { name, role, company, place, active = null, focusRing = false }) {
   const c = {
     ai: css('--ai'), cotton: css('--cotton'), dim: css('--cotton-dim'), ochre: css('--ochre'),
-    hair: css('--hairline-on-ai'), font: css('--font'),
+    hair: css('--hairline-on-ai'), font: css('--font'), mono: css('--mono'),
   };
   ctx.save();
   ctx.fillStyle = c.ai;
   ctx.fillRect(0, 0, FACE_W, FACE_H);
   ctx.textBaseline = 'alphabetic';
 
-  const text = (str, x, y, size, weight, color, align = 'left', track = 0) => {
-    ctx.font = `${weight} ${size}px ${c.font}`;
+  const text = (str, x, y, size, weight, color, align = 'left', track = 0, fam = c.font) => {
+    ctx.font = `${weight} ${size}px ${fam}`;
     ctx.fillStyle = color;
     ctx.textAlign = align;
     if ('letterSpacing' in ctx) ctx.letterSpacing = `${track}px`;
@@ -55,8 +56,9 @@ export function drawFront(ctx, { name, role, company, place, active = null, focu
   const tone = (id) => (on(id) ? c.ochre : c.cotton);
   const toneDim = (id) => (on(id) ? c.ochre : c.dim);
 
-  // role caption
-  text(role.toUpperCase(), M, 264, 28, 400, c.dim, 'left', 28 * 0.08);
+  // top line, in mono like a printed event badge: what I do, where I am
+  text(role.toUpperCase(), M, 264, 26, 400, c.dim, 'left', 26 * 0.06, c.mono);
+  text(place.toUpperCase(), RIGHT, 264, 26, 400, c.dim, 'right', 26 * 0.06, c.mono);
 
   // name: shrink to fit so it never runs into the "about" label
   const [first, ...rest] = name.split(' ');
@@ -66,7 +68,7 @@ export function drawFront(ctx, { name, role, company, place, active = null, focu
   const nameSize = Math.min(144, Math.floor(144 * (RIGHT - 150 - M) / widest));
   text(first, M, 560, nameSize, 700, tone('about'));
   text(last, M, 712, nameSize, 700, tone('about'));
-  text('about', RIGHT, 712, 28, 400, toneDim('about'), 'right');
+  text('about', RIGHT, 712, 26, 400, toneDim('about'), 'right', 0, c.mono);
 
   // hairlines
   ctx.fillStyle = c.hair;
@@ -80,11 +82,11 @@ export function drawFront(ctx, { name, role, company, place, active = null, focu
   ];
   for (const [id, label, y] of rows) {
     text(label, M, y, 56, 400, tone(id));
-    text(id, RIGHT, y, 28, 400, toneDim(id), 'right');
+    text(id, RIGHT, y, 26, 400, toneDim(id), 'right', 0, c.mono);
   }
 
-  // place caption
-  text(place, M, 1344, 28, 400, c.dim);
+  // bottom line
+  text('FROM OKINAWA, JAPAN', M, 1344, 26, 400, c.dim, 'left', 26 * 0.06, c.mono);
 
   // active marker: a 16px ochre square, so state is never color alone
   if (active) {
@@ -102,7 +104,7 @@ export function drawFront(ctx, { name, role, company, place, active = null, focu
 }
 
 export function drawBack(ctx) {
-  const ai = css('--ai'), cotton = css('--cotton'), dim = css('--cotton-dim'), font = css('--font');
+  const ai = css('--ai'), cotton = css('--cotton'), dim = css('--cotton-dim'), font = css('--font'), mono = css('--mono');
   ctx.save();
   ctx.fillStyle = ai;
   ctx.fillRect(0, 0, FACE_W, FACE_H);
@@ -114,7 +116,12 @@ export function drawBack(ctx) {
   ctx.fillText('浜', 512, 900);
   ctx.textBaseline = 'alphabetic';
   ctx.fillStyle = dim;
-  ctx.font = `400 28px ${font}`;
-  ctx.fillText('引き算', 512, 1344);
+  ctx.font = `700 30px ${font}`;
+  if ('letterSpacing' in ctx) ctx.letterSpacing = '12px';
+  ctx.fillText('引き算', 512 + 6, 1300);
+  if ('letterSpacing' in ctx) ctx.letterSpacing = '4px';
+  ctx.font = `400 22px ${mono}`;
+  ctx.fillText('THE BEAUTY OF SUBTRACTION', 512 + 2, 1352);
+  if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
   ctx.restore();
 }
