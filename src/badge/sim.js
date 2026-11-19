@@ -87,10 +87,15 @@ function build(anchor, rest0) {
     pose.position.copy(top.p).sub(tmp.copy(local[0]).applyQuaternion(pose.quaternion));
   }
 
+  // A fixed step, whatever the screen's frame rate. The elastic sags by how
+  // many solver passes it gets per second, so a variable step made the badge
+  // hang lower on a 30fps phone than on a 120fps one.
+  const h = 1 / 120;
+  let acc = 0;
   function step(dt) {
-    dt = Math.min(dt, 1 / 30);
-    const sub = 2, h = dt / sub;
-    for (let s = 0; s < sub; s++) {
+    acc = Math.min(acc + Math.min(dt, 1 / 30), 8 * h);
+    while (acc >= h) {
+      acc -= h;
       for (const q of all) {
         if (drag && q.body) continue; // held: the hand moves it, not gravity
         const v = tmp.subVectors(q.p, q.prev).multiplyScalar(damping);
