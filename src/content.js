@@ -25,17 +25,17 @@ export const projects = [
     index: '01',
     title: 'SnowX: 3D NFT Marketplace in VR',
     org: 'SnowX',
-    year: '2021',
+    year: '2022',
     tags: ['VR', 'Zero-to-One', 'Web3'],
     summary:
       'The first 3D NFT marketplace built for virtual reality. I led product design from zero to launch. Recognized by JETRO, showcased at TechCrunch.',
     meta: [
-      ['role', 'Lead Product Designer'],
-      ['timeline', '2021 · 6 months'],
+      ['role', 'UX Designer'],
+      ['timeline', '2022 · 6 months'],
       ['team', '2 designers · 4 engineers · PM'],
       ['platform', 'Oculus / SideQuest VR'],
     ],
-    lede: 'In 2021, every NFT marketplace looked the same: a grid of thumbnails, a price, a "connect wallet" button. SnowX asked a different question. What if you could stand inside a gallery instead of scrolling past one?',
+    lede: 'In 2022, every NFT marketplace looked the same: a grid of thumbnails, a price, a "connect wallet" button. SnowX asked a different question. What if you could stand inside a gallery instead of scrolling past one?',
     quote: '“We weren’t designing a store. We were designing a place.”',
     phases: [
       {
@@ -246,7 +246,7 @@ export const about = {
     ['2026', 'Allsquare', 'Designed and built a bill splitter with no sign up. Live at all-sqr.com.'],
     ['2023-24', 'mahola at Crypto Garage', 'Enterprise Web3 tools: no-code contract creation and real-time transaction analysis.'],
     ['2022', 'Netflix UI/UX Bootcamp', 'Foundational and Advanced tracks, a full year of human-centered research and design methods. The origin of the case study in ~/work/netflix.'],
-    ['2021', 'SnowX VR marketplace', 'First 3D NFT marketplace on VR. JETRO recognition, TechCrunch showcase.'],
+    ['2022', 'SnowX VR marketplace', 'First 3D NFT marketplace on VR. JETRO recognition, TechCrunch showcase.'],
     ['2019-21', 'B.S. Informatics, UC Irvine', 'Human-Computer Interaction focus, Donald Bren School of ICS.'],
     ['origin', 'Okinawa, Japan', 'Island-raised. Slow thinking. Long perspective. Bilingual from the start.'],
   ],
