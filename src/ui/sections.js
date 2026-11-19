@@ -1,10 +1,37 @@
-import { site, projects, about, events, process, sideProjects } from '../content.js';
+import { site, projects, about, events, process, sideProjects, built } from '../content.js';
 import { attachTilt } from './fx.js';
 
 const esc = (s) =>
   String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
 export function renderSections({ onCardHover, openStudy }) {
+  // ── built: things designed and coded end to end ──
+  document.getElementById('built').innerHTML = `
+    <h2 class="sec-head" id="built-h"><b>~/built</b> · designed and coded</h2>
+    <div class="prose">
+      <p class="lead">${esc(built.headline)}</p>
+      <p>${esc(built.intro)}</p>
+    </div>
+    <ul class="built-list">
+      ${built.items
+        .map(
+          (b) => `
+        <li class="built-item">
+          <h3>${esc(b.title)}</h3>
+          <p>${esc(b.desc)}</p>
+          <div class="tags" role="list" aria-label="Stack">${b.stack.map((t) => `<span class="tag" role="listitem">${esc(t)}</span>`).join('')}</div>
+          <p class="built-links">${b.links
+            .map(([l, u]) => `<a class="inline-link" href="${u}" target="_blank" rel="noopener noreferrer">${esc(l)} ↗<span class="visually-hidden"> (${esc(b.title)})</span></a>`)
+            .join(' ')}</p>
+        </li>`
+        )
+        .join('')}
+    </ul>
+    <h3 class="sub-head">${esc(built.craft.title)}</h3>
+    <ul class="craft">
+      ${built.craft.points.map((t) => `<li>${esc(t).replace(/`([^`]+)`/g, '<code>$1</code>')}</li>`).join('')}
+    </ul>`;
+
   // ── work: project index ────────────────────
   const work = document.getElementById('work');
   work.innerHTML = `

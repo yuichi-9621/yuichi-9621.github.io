@@ -545,3 +545,17 @@ body.no-motion *, body.no-motion *::before, body.no-motion *::after {
   overflow: hidden;
   white-space: nowrap;
 }
+
+/* ── built panel ── */
+.built-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+.built-item {
+  border: 1px solid color-mix(in srgb, var(--phos) 22%, transparent);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+}
+.built-item h3 { margin: 0 0 .4rem; color: var(--phos); font-size: 1rem; }
+.built-item p { margin: 0 0 .6rem; color: var(--ink); line-height: 1.55; }
+.built-links { display: flex; gap: 1rem; margin: .4rem 0 0 !important; }
+.craft { margin: 0; padding-left: 1.1rem; color: var(--ink-dim); line-height: 1.6; }
+.craft code { color: var(--cyan); }

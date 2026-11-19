@@ -305,14 +305,41 @@ the problem  <      > ⇄ the real problem ⇄ <      >  worth shipping
   ],
 };
 
+// Things designed and built end to end. Shown first, in the BUILT panel.
+export const built = {
+  headline: 'Things I designed and then built myself.',
+  intro: 'Both are live. I did the design and wrote the code.',
+  items: [
+    {
+      title: 'yuichiokuhama.com',
+      desc: 'The site you’re on. A liquid simulation runs through a three pass WebGL2 pipeline and comes out as ASCII glyphs, and the terminal at the bottom is real navigation. The colors are sampled from photos of 19th century bingata robes from Okinawa.',
+      stack: ['Vanilla JS', 'WebGL2 / GLSL', 'Vite', 'Motion', 'GitHub Pages'],
+      links: [
+        ['live', 'https://yuichiokuhama.com'],
+        ['source', 'https://github.com/yuichi-9621/yuichi-9621.github.io'],
+      ],
+    },
+    {
+      title: 'Allsquare',
+      desc: 'Multi-currency group bill splitter with no sign-up: the shared link is the credential. Designed and built solo, from the passport-stamp identity and component library down to the minimal-transfer settlement engine. Live in production.',
+      stack: ['PWA', 'Solo build', 'Live product'],
+      links: [['live', 'https://all-sqr.com']],
+    },
+  ],
+  craft: {
+    title: 'how this site is made',
+    points: [
+      'No framework. Under 45 kB of JavaScript, gzipped.',
+      'Three shader passes: a pointer trail, the liquid scene, then the ASCII pass.',
+      'Turns the animation off when your system asks for reduced motion, and `motion off` does the same.',
+      'Skip link, real buttons, and focus moves to the heading of every panel you open.',
+      'Works without WebGL. The colors fall back to plain CSS.',
+    ],
+  },
+};
+
 // Smaller projects — shipped fast, no full case study. Add `link` when ready.
 export const sideProjects = [
-  {
-    title: 'Allsquare',
-    desc: 'Multi-currency group bill splitter with no sign-up: the shared link is the credential. Designed and built solo, from the passport-stamp identity and component library down to the minimal-transfer settlement engine. Live in production.',
-    tags: ['Live product', 'Solo build', 'PWA'],
-    link: 'https://all-sqr.com',
-  },
   {
     title: 'SociaLens',
     desc: 'VR social commerce app with unique discovery features, prototyped and delivered. 2 awards from sponsors of ETH Mexico Global Hackathon 2022.',

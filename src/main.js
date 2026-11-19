@@ -53,8 +53,10 @@ function bootRenderer() {
 }
 
 // ── panels / router ──────────────────────────
-const panels = ['home', 'work', 'study', 'process', 'about', 'events', 'contact'];
-const navPanels = panels.filter((p) => p !== 'study');
+const panels = ['home', 'built', 'work', 'study', 'process', 'about', 'events', 'contact'];
+// process and events stay reachable by command and deep link, just not as chips
+const navPanels = ['home', 'built', 'work', 'about', 'contact'];
+const routable = panels.filter((p) => p !== 'study');
 let firstOpen = true;
 
 function openPanel(name, { focus = true } = {}) {
@@ -237,7 +239,7 @@ typeName();
 // deep links: #work, #process … or a project id (#snowx)
 const initial = location.hash.replace('#', '');
 if (projects.some((p) => p.id === initial)) openStudy(initial);
-else openPanel(navPanels.includes(initial) ? initial : 'home', { focus: false });
+else openPanel(routable.includes(initial) ? initial : 'home', { focus: false });
 
 // greet
 term.print('welcome. type `help`, or just start clicking. everything melts.');
