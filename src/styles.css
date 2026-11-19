@@ -3,15 +3,19 @@
 @import '@fontsource/jetbrains-mono/700.css';
 
 :root {
-  --bg: #060907;
-  --ink: #e2ffee;
-  --ink-dim: #8fb6a0;
-  --phos: #6bffa8;
-  --phos-soft: rgba(107, 255, 168, 0.55);
-  --cyan: #7df2ff;
-  --violet: #c3a3ff;
-  --glass: rgba(10, 20, 16, 0.6);
-  --glass-edge: rgba(120, 255, 190, 0.22);
+  /* palette tokens (bingata by default): overwritten at runtime by src/palettes.js (`theme` command) */
+  --bg: #0e1b21;
+  --ink: #efe8d6;
+  --ink-dim: #b1a994;
+  --phos: #e3c35f;
+  --cyan: #95c2c4;
+  --violet: #e57a6e;
+  --surface: #162a31;
+  --on-phos: #1f1708;
+  /* derived */
+  --phos-soft: color-mix(in srgb, var(--phos) 55%, transparent);
+  --glass: color-mix(in srgb, var(--surface) 60%, transparent);
+  --glass-edge: color-mix(in srgb, var(--phos) 22%, transparent);
   --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
@@ -26,7 +30,7 @@ html, body {
   overflow: hidden;
 }
 
-::selection { background: var(--phos); color: #04120a; }
+::selection { background: var(--phos); color: var(--on-phos); }
 
 /* visible focus for every interactive element (keyboard users) */
 :focus-visible {
@@ -40,7 +44,7 @@ html, body {
   left: 12px; top: -100px;
   z-index: 100;
   background: var(--phos);
-  color: #04120a;
+  color: var(--on-phos);
   font: 500 0.85rem var(--mono);
   padding: 10px 16px;
   border-radius: 6px;
@@ -59,8 +63,8 @@ html, body {
 
 #fallback-bg {
   background:
-    radial-gradient(120% 90% at 20% 10%, rgba(23, 232, 160, 0.14), transparent 55%),
-    radial-gradient(100% 80% at 85% 85%, rgba(180, 140, 255, 0.12), transparent 50%),
+    radial-gradient(120% 90% at 20% 10%, color-mix(in srgb, var(--phos) 14%, transparent), transparent 55%),
+    radial-gradient(100% 80% at 85% 85%, color-mix(in srgb, var(--violet) 12%, transparent), transparent 50%),
     var(--bg);
 }
 
@@ -95,7 +99,7 @@ body::after {
   letter-spacing: 0.06em;
   color: var(--ink-dim);
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(120, 255, 190, 0.12);
+  border-bottom: 1px solid color-mix(in srgb, var(--phos) 12%, transparent);
 }
 
 .status-left { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
@@ -113,7 +117,7 @@ body::after {
   left: 0; top: 0;
   background: var(--phos);
   border-radius: 999px;
-  box-shadow: 0 0 18px rgba(107, 255, 168, 0.35);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--phos) 35%, transparent);
   opacity: 0;
   will-change: transform, width;
 }
@@ -123,7 +127,7 @@ body::after {
   letter-spacing: 0.12em;
   color: var(--ink-dim);
   background: transparent;
-  border: 1px solid rgba(120, 255, 190, 0.18);
+  border: 1px solid color-mix(in srgb, var(--phos) 18%, transparent);
   border-radius: 999px;
   padding: 12px 16px; /* ≥40px touch target */
   cursor: pointer;
@@ -135,7 +139,7 @@ body::after {
   text-shadow: 0 0 10px var(--phos-soft);
 }
 .chip.active, .chip[aria-current='page'] {
-  color: #04120a;
+  color: var(--on-phos);
   border-color: transparent;
   text-shadow: none;
 }
@@ -165,7 +169,7 @@ body::after {
   align-content: safe center;
   overflow: hidden auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(120,255,190,0.25) transparent;
+  scrollbar-color: color-mix(in srgb, var(--phos) 25%, transparent) transparent;
   padding: 18px 0;
 }
 #stage:focus { outline: none; }
@@ -184,7 +188,7 @@ body::after {
   content: '';
   position: absolute;
   inset: -60px -80px;
-  background: radial-gradient(ellipse 90% 80% at 32% 45%, rgba(4, 9, 6, 0.8), rgba(4, 9, 6, 0.3) 60%, transparent 78%);
+  background: radial-gradient(ellipse 90% 80% at 32% 45%, color-mix(in srgb, var(--bg) 80%, transparent), color-mix(in srgb, var(--bg) 30%, transparent) 60%, transparent 78%);
   z-index: -1;
   pointer-events: none;
 }
@@ -214,7 +218,7 @@ body::after {
   line-height: 1.02;
   letter-spacing: -0.02em;
   color: var(--ink);
-  text-shadow: 0 0 24px rgba(107, 255, 168, 0.25);
+  text-shadow: 0 0 24px color-mix(in srgb, var(--phos) 25%, transparent);
   margin-bottom: 14px;
 }
 #name .cursor {
@@ -231,7 +235,7 @@ body::after {
   font-size: clamp(0.95rem, 2.2vw, 1.3rem);
   color: var(--phos);
   margin-bottom: 18px;
-  text-shadow: 0 0 14px rgba(107, 255, 168, 0.3);
+  text-shadow: 0 0 14px color-mix(in srgb, var(--phos) 30%, transparent);
   max-width: 46ch;
 }
 #intro {
@@ -287,16 +291,16 @@ body::after {
   content: '';
   position: absolute;
   inset: -40% -20%;
-  background: linear-gradient(115deg, transparent 42%, rgba(160, 255, 220, 0.10) 50%, transparent 58%);
+  background: linear-gradient(115deg, transparent 42%, color-mix(in srgb, var(--phos) 10%, transparent) 50%, transparent 58%);
   transform: translateX(-60%);
   transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
   pointer-events: none;
 }
 .card:hover, .card:focus-visible {
   /* lift + 3D tilt handled by fx.js so pointer position can steer it */
-  border-color: rgba(140, 255, 205, 0.45);
+  border-color: color-mix(in srgb, var(--phos) 45%, transparent);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 26px 60px rgba(0, 0, 0, 0.45),
-              0 0 34px rgba(107, 255, 168, 0.10);
+              0 0 34px color-mix(in srgb, var(--phos) 10%, transparent);
 }
 .card:hover::before, .card:focus-visible::before { transform: translateX(60%); }
 
@@ -318,7 +322,7 @@ body::after {
   font-size: 0.68rem;
   letter-spacing: 0.08em;
   color: var(--violet);
-  border: 1px solid rgba(180, 140, 255, 0.3);
+  border: 1px solid color-mix(in srgb, var(--violet) 30%, transparent);
   border-radius: 999px;
   padding: 4px 10px;
 }
@@ -332,7 +336,7 @@ body::after {
   grid-template-columns: 200px 1fr auto;
   align-items: baseline;
   padding: 12px 0;
-  border-bottom: 1px dashed rgba(120, 255, 190, 0.14);
+  border-bottom: 1px dashed color-mix(in srgb, var(--phos) 14%, transparent);
 }
 .sp-title { font-size: 0.85rem; font-weight: 700; color: var(--ink); }
 .sp-title a { color: var(--phos); text-decoration: none; border-bottom: 1px dashed var(--phos-soft); }
@@ -351,7 +355,7 @@ body::after {
   margin: 18px 0 4px;
   padding: 14px 18px;
   border-left: 2px solid var(--phos);
-  background: rgba(107, 255, 168, 0.06);
+  background: color-mix(in srgb, var(--phos) 6%, transparent);
   border-radius: 0 10px 10px 0;
   font-size: 0.85rem;
   line-height: 1.8;
@@ -373,10 +377,10 @@ body::after {
 
 .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 10px; max-width: 860px; }
 .pillar {
-  border: 1px solid rgba(120, 255, 190, 0.16);
+  border: 1px solid color-mix(in srgb, var(--phos) 16%, transparent);
   border-radius: 12px;
   padding: 14px 16px;
-  background: rgba(10, 20, 16, 0.45);
+  background: color-mix(in srgb, var(--surface) 45%, transparent);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
@@ -389,7 +393,7 @@ body::after {
   grid-template-columns: 64px 1fr;
   gap: 14px;
   padding: 9px 0;
-  border-bottom: 1px dashed rgba(120, 255, 190, 0.14);
+  border-bottom: 1px dashed color-mix(in srgb, var(--phos) 14%, transparent);
   font-size: 0.82rem;
   line-height: 1.65;
 }
@@ -399,7 +403,7 @@ body::after {
 .themes .idx { padding-top: 2px; }
 
 .skill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; max-width: 660px; }
-.skill-row .tag { color: var(--ink); border-color: rgba(120, 255, 190, 0.25); }
+.skill-row .tag { color: var(--ink); border-color: color-mix(in srgb, var(--phos) 25%, transparent); }
 
 /* ── process (double diamond) ───────────────── */
 .diamond {
@@ -410,10 +414,10 @@ body::after {
   font-size: clamp(0.55rem, 1.5vw, 0.8rem);
   line-height: 1.45;
   color: var(--phos);
-  text-shadow: 0 0 8px rgba(107, 255, 168, 0.25);
-  border: 1px solid rgba(120, 255, 190, 0.16);
+  text-shadow: 0 0 8px color-mix(in srgb, var(--phos) 25%, transparent);
+  border: 1px solid color-mix(in srgb, var(--phos) 16%, transparent);
   border-radius: 12px;
-  background: rgba(6, 12, 9, 0.55);
+  background: color-mix(in srgb, var(--bg) 55%, transparent);
   overflow-x: auto;
 }
 @media (max-width: 480px) {
@@ -422,10 +426,10 @@ body::after {
 .dd-steps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; max-width: 900px; }
 @media (max-width: 560px) { .dd-steps { grid-template-columns: 1fr; } }
 .dd-step {
-  border: 1px solid rgba(120, 255, 190, 0.16);
+  border: 1px solid color-mix(in srgb, var(--phos) 16%, transparent);
   border-radius: 12px;
   padding: 12px 14px;
-  background: rgba(10, 20, 16, 0.45);
+  background: color-mix(in srgb, var(--surface) 45%, transparent);
 }
 .dd-step dt { font-size: 0.78rem; font-weight: 700; color: var(--cyan); margin-bottom: 4px; }
 .dd-step dt span { color: var(--phos); font-weight: 400; }
@@ -450,7 +454,7 @@ body::after {
   color: var(--cyan);
   font-size: 0.9rem;
   line-height: 1.7;
-  background: rgba(125, 242, 255, 0.05);
+  background: color-mix(in srgb, var(--cyan) 5%, transparent);
   border-radius: 0 10px 10px 0;
 }
 .phase { margin: 24px 0; }
@@ -477,10 +481,10 @@ body::after {
   margin: 24px 0 6px;
 }
 .metric {
-  border: 1px solid rgba(120, 255, 190, 0.2);
+  border: 1px solid color-mix(in srgb, var(--phos) 20%, transparent);
   border-radius: 12px;
   padding: 14px;
-  background: rgba(10, 20, 16, 0.5);
+  background: color-mix(in srgb, var(--surface) 50%, transparent);
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -491,7 +495,7 @@ body::after {
 
 /* ── CLI ────────────────────────────────────── */
 #cli {
-  border-top: 1px solid rgba(120, 255, 190, 0.12);
+  border-top: 1px solid color-mix(in srgb, var(--phos) 12%, transparent);
   padding-top: 8px;
 }
 #cli-log {
@@ -521,7 +525,7 @@ body::after {
   caret-color: var(--phos);
   min-height: 40px; /* touch target */
 }
-#cli-input::placeholder { color: rgba(143, 182, 160, 0.6); }
+#cli-input::placeholder { color: color-mix(in srgb, var(--ink-dim) 60%, transparent); }
 #cli-input:focus-visible { outline: none; } /* the prompt row is the focus context */
 
 /* reduced motion: keep fades, kill movement */

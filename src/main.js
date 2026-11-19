@@ -8,6 +8,7 @@ import {
   attachScramble, initPress, countUpMetrics,
 } from './ui/fx.js';
 import { track } from './ui/track.js';
+import { palettes, DEFAULT_PALETTE, resolvePalette, applyPaletteCss, toVec3 } from './palettes.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -17,12 +18,29 @@ const stored = localStorage.getItem('motion');
 let motionOn = stored !== null ? stored === 'on' : !rmQuery.matches;
 setFxEnabled(motionOn);
 
+// ── palette (persisted per visitor, defaults to DEFAULT_PALETTE) ──
+const readPref = (k) => { try { return localStorage.getItem(k); } catch { return null; } };
+const writePref = (k, v) => { try { localStorage.setItem(k, v); } catch { /* private mode */ } };
+let paletteKey = resolvePalette(readPref('palette')) || DEFAULT_PALETTE;
+const glPalette = (key) => {
+  const p = palettes[key];
+  return { ink: toVec3(p.css.phos), stops: p.stops.map(toVec3), rim: p.rim.map(toVec3), drift: p.drift };
+};
+applyPaletteCss(paletteKey);
+function setPalette(key) {
+  paletteKey = key;
+  applyPaletteCss(key);
+  renderer?.setPalette(glPalette(key));
+  writePref('palette', key);
+}
+
 // ── background renderer (graceful fallback) ──
 let renderer = null;
 function bootRenderer() {
   try {
     renderer = createRenderer($('gl'), {
       reducedMotion: !motionOn,
+      palette: glPalette(paletteKey),
       font: '"JetBrains Mono", monospace',
     });
   } catch {
@@ -209,6 +227,8 @@ const term = createTerminal({
     term.print(v ? 'motion: on' : 'motion: off. the field is frozen.');
   },
   getMotion: () => motionOn,
+  setPalette,
+  getPalette: () => paletteKey,
 });
 
 typeBoot();

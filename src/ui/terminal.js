@@ -2,10 +2,11 @@ import { site, projects } from '../content.js';
 import { lineIn } from './fx.js';
 import { trackEvent } from './track.js';
 import { createTraffic } from './traffic.js';
+import { palettes, resolvePalette } from '../palettes.js';
 
 const SECTIONS = ['home', 'work', 'process', 'about', 'events', 'contact'];
 
-export function createTerminal({ openPanel, openStudy, getRenderer, setMotion, getMotion }) {
+export function createTerminal({ openPanel, openStudy, getRenderer, setMotion, getMotion, setPalette, getPalette }) {
   const input = document.getElementById('cli-input');
   const logEl = document.getElementById('cli-log');
   const history = [];
@@ -31,6 +32,7 @@ export function createTerminal({ openPanel, openStudy, getRenderer, setMotion, g
           '  open snowx|mahola|netflix         read a case study',
           '  liquid · ascii                    melt / freeze the background',
           '  motion on|off                     pause or resume animation',
+          '  theme [name]                      list or switch color palettes',
           '  ls · whoami · email · clear       the usual suspects',
         ].join('\n')
       );
@@ -65,6 +67,21 @@ export function createTerminal({ openPanel, openStudy, getRenderer, setMotion, g
       if (arg === 'off') setMotion(false);
       else if (arg === 'on') setMotion(true);
       else print(`motion is ${getMotion() ? 'on' : 'off'}. try \`motion off\` or \`motion on\``);
+    },
+    theme(name) {
+      if (!name) {
+        const cur = getPalette?.();
+        print(
+          Object.entries(palettes)
+            .map(([k, p]) => `${k === cur ? '* ' : '  '}${k.padEnd(10)} ${p.note}`)
+            .join('\n') + '\n\ntry `theme phosphor`'
+        );
+        return;
+      }
+      const key = resolvePalette(name);
+      if (!key) { print(`no palette called ${name}. try \`theme\` to list them`); return; }
+      setPalette?.(key);
+      print(`palette → ${palettes[key].label}`);
     },
     photography() {
       print('shot on leica · san francisco & japan. the discipline of composing a frame,\nwaiting for the light, and getting it right in-camera is the same discipline\nI bring to an interface. gallery coming soon.');

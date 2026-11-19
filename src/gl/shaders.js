@@ -47,6 +47,8 @@ out vec4 outColor;
 uniform float uTime;
 uniform float uAspect;
 uniform sampler2D uTrail;
+uniform vec3 uC0, uC1, uC2, uC3, uC4; // palette stops, dark to light
+uniform float uDrift;               // iridescent hue drift amount
 
 // ── simplex noise (Ashima / IQ public-domain style) ──
 vec3 mod289(vec3 x){ return x - floor(x * (1.0/289.0)) * 289.0; }
@@ -102,18 +104,19 @@ void main() {
   float n = f * 0.5 + 0.5;
 
   // liquid palette: deep sea → emerald → cyan → violet → chrome
-  vec3 c0 = vec3(0.012, 0.04, 0.036);
-  vec3 c1 = vec3(0.03, 0.2, 0.15);
-  vec3 c2 = vec3(0.08, 0.78, 0.52);
-  vec3 c3 = vec3(0.36, 0.9, 1.0);
-  vec3 c4 = vec3(0.66, 0.5, 1.0);
+  // stops come from the active palette (src/palettes.js)
+  vec3 c0 = uC0;
+  vec3 c1 = uC1;
+  vec3 c2 = uC2;
+  vec3 c3 = uC3;
+  vec3 c4 = uC4;
 
   vec3 col = mix(c0, c1, smoothstep(0.2, 0.58, n));
   col = mix(col, c2, smoothstep(0.56, 0.78, n));
   col = mix(col, c3, smoothstep(0.74, 0.9, n));
   col = mix(col, c4, smoothstep(0.87, 0.99, n));
   // iridescent drift: violet sheen following the first warp octave
-  col = mix(col, col.zyx * vec3(0.9, 0.7, 1.25), 0.3 * smoothstep(0.35, 0.95, q.x));
+  col = mix(col, col.zyx * vec3(0.9, 0.7, 1.25), uDrift * smoothstep(0.35, 0.95, q.x));
 
   // specular "chrome" streaks where the warp folds — liquid-metal glint
   float glint = pow(clamp(1.0 - abs(f - 0.18) * 4.0, 0.0, 1.0), 6.0);
@@ -136,6 +139,8 @@ uniform float uGlyphs;    // glyph count in atlas
 uniform float uTime;
 uniform float uLiquid;    // 0 = full ascii, 1 = full liquid (command toggle)
 uniform vec3 uInk;        // terminal phosphor color
+uniform vec3 uRimA;       // melt rim colors (palette)
+uniform vec3 uRimB;
 
 float luma(vec3 c) { return dot(c, vec3(0.2126, 0.7152, 0.0722)); }
 
@@ -179,7 +184,7 @@ void main() {
 
   // meniscus: bright iridescent rim where ascii melts into liquid
   float rim = smoothstep(0.05, 0.45, m) * (1.0 - smoothstep(0.45, 0.9, m));
-  vec3 rimCol = mix(vec3(0.4, 1.0, 0.8), vec3(0.75, 0.6, 1.0), 0.5 + 0.5 * sin(uTime * 0.7));
+  vec3 rimCol = mix(uRimA, uRimB, 0.5 + 0.5 * sin(uTime * 0.7));
 
   vec3 col = mix(asciiCol, liquid, melt);
   col += rim * rimCol * 0.22;

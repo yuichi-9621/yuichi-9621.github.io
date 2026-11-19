@@ -140,7 +140,28 @@ export function createRenderer(canvas, opts = {}) {
 
   let liquid = 0;         // command-toggled full-liquid mode
   let liquidTarget = 0;
-  const ink = opts.ink || [0.42, 1.0, 0.66];
+  // palette: set via setPalette(); defaults match the original phosphor look
+  let pal = {
+    ink: [0.42, 1.0, 0.66],
+    stops: [[0.012, 0.04, 0.036], [0.03, 0.2, 0.15], [0.08, 0.78, 0.52], [0.36, 0.9, 1.0], [0.66, 0.5, 1.0]],
+    rim: [[0.4, 1.0, 0.8], [0.75, 0.6, 1.0]],
+    drift: 0.3,
+  };
+  if (opts.palette) pal = opts.palette;
+  let palTarget = pal;
+  // ease every palette color toward the target so a theme change flows, not snaps
+  const mixv = (a, b, k) => a.map((x, i) => x + (b[i] - x) * k);
+  function easePalette(k) {
+    if (pal === palTarget) return;
+    pal = {
+      ink: mixv(pal.ink, palTarget.ink, k),
+      stops: pal.stops.map((c, i) => mixv(c, palTarget.stops[i], k)),
+      rim: pal.rim.map((c, i) => mixv(c, palTarget.rim[i], k)),
+      drift: pal.drift + (palTarget.drift - pal.drift) * k,
+    };
+    const close = pal.stops.every((c, i) => c.every((x, j) => Math.abs(x - palTarget.stops[i][j]) < 0.002));
+    if (close) pal = palTarget;
+  }
   const cellPx = (isMobile ? 9 : 11) * dpr;
 
   let raf = 0;
@@ -151,6 +172,7 @@ export function createRenderer(canvas, opts = {}) {
     const dt = Math.min(0.05, (now - t0) / 1000);
     t0 = now;
     if (!reduced) elapsed += dt;
+    easePalette(reduced ? 1 : Math.min(1, dt * 4));
     liquid += (liquidTarget - liquid) * Math.min(1, dt * 3);
 
     // 1. trail ping-pong
@@ -176,6 +198,12 @@ export function createRenderer(canvas, opts = {}) {
     gl.useProgram(progs.scene);
     gl.uniform1f(U.scene.uTime, elapsed);
     gl.uniform1f(U.scene.uAspect, W / H);
+    gl.uniform3fv(U.scene.uC0, pal.stops[0]);
+    gl.uniform3fv(U.scene.uC1, pal.stops[1]);
+    gl.uniform3fv(U.scene.uC2, pal.stops[2]);
+    gl.uniform3fv(U.scene.uC3, pal.stops[3]);
+    gl.uniform3fv(U.scene.uC4, pal.stops[4]);
+    gl.uniform1f(U.scene.uDrift, pal.drift);
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, trailA.tex);
     gl.uniform1i(U.scene.uTrail, 0);
@@ -199,7 +227,9 @@ export function createRenderer(canvas, opts = {}) {
     gl.uniform1f(U.ascii.uGlyphs, GLYPH_RAMP.length);
     gl.uniform1f(U.ascii.uTime, elapsed);
     gl.uniform1f(U.ascii.uLiquid, liquid);
-    gl.uniform3f(U.ascii.uInk, ink[0], ink[1], ink[2]);
+    gl.uniform3fv(U.ascii.uInk, pal.ink);
+    gl.uniform3fv(U.ascii.uRimA, pal.rim[0]);
+    gl.uniform3fv(U.ascii.uRimB, pal.rim[1]);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
 
     raf = requestAnimationFrame(frame);
@@ -226,6 +256,7 @@ export function createRenderer(canvas, opts = {}) {
   return {
     splat,
     setLiquid(v) { liquidTarget = v; },
+    setPalette(p) { palTarget = p; },
     getLiquid() { return liquidTarget; },
     // freeze/unfreeze in place — never recreate the GL context
     // (a canvas whose context was lost cannot get a fresh one)
