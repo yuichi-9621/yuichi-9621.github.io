@@ -1,0 +1,32 @@
+/* Zen Kaku Gothic New (SIL OFL), from @fontsource/zen-kaku-gothic-new.
+   Latin comes from the package. Japanese is only 奥浜 (bold, badge back)
+   and 引き算 (regular), so only the five slices that hold those glyphs ship,
+   each limited to exactly those characters. */
+@import '@fontsource/zen-kaku-gothic-new/latin-400.css';
+@import '@fontsource/zen-kaku-gothic-new/latin-700.css';
+
+@font-face {
+  font-family: 'Zen Kaku Gothic New'; font-style: normal; font-display: swap; font-weight: 700;
+  src: url('./fonts/zen-kaku-gothic-new-101-700-normal.woff2') format('woff2');
+  unicode-range: U+5965; /* 奥 */
+}
+@font-face {
+  font-family: 'Zen Kaku Gothic New'; font-style: normal; font-display: swap; font-weight: 700;
+  src: url('./fonts/zen-kaku-gothic-new-103-700-normal.woff2') format('woff2');
+  unicode-range: U+6D5C; /* 浜 */
+}
+@font-face {
+  font-family: 'Zen Kaku Gothic New'; font-style: normal; font-display: swap; font-weight: 400;
+  src: url('./fonts/zen-kaku-gothic-new-103-400-normal.woff2') format('woff2');
+  unicode-range: U+7B97; /* 算 */
+}
+@font-face {
+  font-family: 'Zen Kaku Gothic New'; font-style: normal; font-display: swap; font-weight: 400;
+  src: url('./fonts/zen-kaku-gothic-new-114-400-normal.woff2') format('woff2');
+  unicode-range: U+5F15; /* 引 */
+}
+@font-face {
+  font-family: 'Zen Kaku Gothic New'; font-style: normal; font-display: swap; font-weight: 400;
+  src: url('./fonts/zen-kaku-gothic-new-119-400-normal.woff2') format('woff2');
+  unicode-range: U+304D; /* き */
+}

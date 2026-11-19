@@ -1,0 +1,98 @@
+/*
+ * tokens.css
+ * Design tokens for yuichiokuhama.com. Spec lives in /DESIGN.md.
+ * Principle: 引き算 (subtraction). Four bingata colors, one job each.
+ * Hex values are sampled from 19th century Ryukyu bingata robes.
+ *
+ * Fonts (install, then import once in the entry stylesheet):
+ *   npm i @fontsource/zen-kaku-gothic-new
+ *   @import '@fontsource/zen-kaku-gothic-new/400.css';
+ *   @import '@fontsource/zen-kaku-gothic-new/700.css';
+ *
+ * Canvas 2D cannot read CSS variables. Read them once with
+ * getComputedStyle(document.documentElement).getPropertyValue('--ai').
+ */
+
+:root {
+  /* color: sampled */
+  --cotton: #dfddd2; /* ground: page and sheet */
+  --ai: #1e4553;     /* ink on cotton, and the badge face. 7.59:1 on cotton */
+  --ochre: #d7ba5d;  /* active state on the badge only. 5.45:1 on ai */
+  --beni: #cf574e;   /* lanyard band only. 3.01:1 on cotton */
+
+  /* color: derived (mixes of the above, no new hues) */
+  --ai-dim: #45636c;     /* secondary text on cotton. ai 80% + cotton 20%. 4.74:1 */
+  --cotton-dim: #afb7b2; /* secondary text on the badge. cotton 75% + ai 25%. 5.04:1 on ai */
+  --hairline-on-cotton: rgb(30 69 83 / 0.2);
+  --hairline-on-ai: rgb(223 221 210 / 0.25);
+  --scrim: rgb(30 69 83 / 0.24);
+
+  /* roles */
+  --bg: var(--cotton);
+  --ink: var(--ai);
+  --ink-dim: var(--ai-dim);
+  --focus: var(--ai);          /* focus ring on cotton */
+  --focus-on-ai: var(--ochre); /* focus ring on the badge */
+
+  /* type */
+  --font: 'Zen Kaku Gothic New', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', system-ui, sans-serif;
+  --weight-regular: 400;
+  --weight-bold: 700;
+  --text-caption: 0.8125rem; /* 13px */
+  --text-body: 1rem;         /* 16px */
+  --text-lead: 1.25rem;      /* 20px */
+  --text-title: 2rem;        /* 32px */
+  --leading-body: 1.6;
+  --leading-lead: 1.45;
+  --leading-title: 1.15;
+  --tracking-caption: 0.08em;
+  --tracking-title: -0.01em;
+  --measure: 60ch;
+
+  /* space: 6 steps */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 48px;
+  --space-6: 96px;
+
+  /* badge canvas (px in the 1024 x 1440 texture) */
+  --badge-w: 1024;
+  --badge-h: 1440;
+  --badge-margin: 96;
+  --badge-row: 144;
+
+  /* sheet */
+  --sheet-width: 640px;
+  --sheet-pad: var(--space-5);
+  --sheet-radius: 16px;
+  --hit-min: 44px;
+
+  /* focus ring */
+  --ring-width: 2px;
+  --ring-offset: 3px;
+
+  /* motion */
+  --dur-fast: 120ms;  /* hover, focus */
+  --dur-leave: 200ms; /* sheet out */
+  --dur-enter: 320ms; /* sheet in */
+  --ease-out: cubic-bezier(0.2, 0, 0, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --sheet-shift: 24px;
+}
+
+@media (max-width: 899px) {
+  :root {
+    --sheet-width: 100vw;
+    --sheet-pad: var(--space-4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-leave: 120ms;
+    --dur-enter: 120ms;
+    --sheet-shift: 0px;
+  }
+}

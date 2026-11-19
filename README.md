@@ -1,49 +1,29 @@
-# yuichi.okuhama — interactive portfolio
+# yuichiokuhama.com
 
-An interactive terminal-meets-liquid portfolio. The background is a live WebGL
-piece: a domain-warped liquid gradient rendered as terminal glyphs that **melt
-into smooth liquid** wherever the cursor moves. Navigation is a real command
-prompt (`help`, `work`, `about`, `contact` …) — or just click.
+One badge on a lanyard. Grab it, swing it, and tap a line on it to open that page.
+The idea behind it is 引き算 (hikizan): make something better by taking things away.
+The rules are in [DESIGN.md](DESIGN.md).
 
-Built with vanilla JS + Vite — no frameworks, no trackers. The only runtime
-dependency is [Motion](https://motion.dev) (springs, stagger) driving the
-interaction layer in `src/ui/fx.js`: staggered panel entrances, the sliding
-nav pill, 3D card tilt, text scramble, and metric count-ups. Everything
-respects the motion toggle and `prefers-reduced-motion`. Free hosting on
-GitHub Pages.
+## How it's built
 
-## Editing content
+- `src/badge/sim.js`: a small position-based sim (four rope points and a rigid card), no physics engine.
+- `src/badge/scene.js`: three.js scene, the lanyard ribbon, dragging and clicks.
+- `src/badge/face.js`: draws the front (the menu) and the back (奥浜) onto canvases.
+- `tools/badge.py`: models the card and clip in Blender and exports `public/badge.glb`.
+  Run it with Blender's Python module: `python3 tools/badge.py public/badge.glb`.
+- `src/sheet.js`: the one sheet that opens over the badge, a native `<dialog>`.
+- `src/content.js`: all the copy. Edit it here and the site updates.
+- `src/tokens.css`: colors, type, spacing and motion. Four colors sampled from 19th century Ryukyu bingata robes.
 
-All copy (name, intro, projects, links, boot lines) lives in
-[`src/content.js`](src/content.js). Edit that one file and push.
-
-## Design system
-
-- `src/gl/shaders.js` — the three-pass WebGL pipeline (pointer-trail buffer →
-  liquid gradient scene → ASCII composite with refraction + chromatic
-  dispersion). Palette and melt feel are tuned here.
-- `src/styles.css` — phosphor terminal chrome + liquid-glass cards.
-- Inspired by [shadergradient](https://github.com/ruucm/shadergradient) (MIT),
-  [liquid-logo](https://github.com/paper-design/liquid-logo) and Apple's liquid
-  glass — all effects reimplemented from scratch in custom GLSL/CSS.
+The badge menu is also a real `<nav>` of buttons, so the site works with a keyboard,
+a screen reader, and without WebGL (it becomes a flat card).
 
 ## Develop
 
-```bash
-npm install
-npm run dev      # local dev server
-npm run build    # production build → dist/
+```
+npm ci
+npm run dev
+npm run build
 ```
 
-## Deploy
-
-Pushes to `main` deploy automatically via GitHub Actions
-(`.github/workflows/deploy.yml`) to GitHub Pages.
-
-One-time setup: repo **Settings → Pages → Source: GitHub Actions**.
-
-## Terminal commands
-
-`help` `work` `about` `contact` `home` `ls` `whoami` `email` `linkedin`
-`github` `liquid` (melt everything) `ascii` (re-freeze) `motion on|off`
-`clear` — and a couple of hidden ones.
+Deploys to GitHub Pages from `main`. Visits are counted with GoatCounter (no cookies).

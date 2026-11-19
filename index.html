@@ -3,14 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="description" content="Yuichi Okuhama designs and builds software in San Francisco. An interactive terminal portfolio." />
-    <meta name="theme-color" content="#0e1b21" />
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230e1b21'/%3E%3Crect x='4' y='4' width='56' height='56' rx='11' fill='none' stroke='%23e3c35f' stroke-opacity='0.35' stroke-width='2'/%3E%3Ctext x='32' y='42' font-family='JetBrains Mono,Menlo,monospace' font-size='26' font-weight='700' text-anchor='middle' fill='%23e3c35f'%3EYO%3C/text%3E%3Ccircle cx='50' cy='15' r='4' fill='%23e57a6e'/%3E%3C/svg%3E" />
+    <meta name="description" content="Yuichi Okuhama designs software and then builds it. San Francisco, from Okinawa." />
+    <meta name="theme-color" content="#dfddd2" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='12' y='4' width='40' height='56' rx='5' fill='%231e4553'/%3E%3Crect x='24' y='9' width='16' height='3' rx='1.5' fill='%23dfddd2'/%3E%3C/svg%3E" />
     <title>Yuichi Okuhama · Design Engineer</title>
     <script type="module" src="/src/main.js"></script>
     <!-- GoatCounter: cookie-less, no-PII visit counts. Owner-only dashboard at
          yuichiokuhama.goatcounter.com. no_onload: views are counted as virtual
-         pageviews via src/ui/track.js so panel/study navigation is visible.
+         pageviews via src/track.js so sheet navigation is visible.
          count.js ignores localhost, so dev sessions don't pollute the stats. -->
     <script
       data-goatcounter="https://yuichiokuhama.goatcounter.com/count"
@@ -20,49 +20,26 @@
     ></script>
   </head>
   <body>
-    <a class="skip-link" href="#stage">Skip to content</a>
+    <!-- The badge's menu as real buttons, first in the DOM (DESIGN.md §10).
+         With WebGL it's visually hidden but focusable. Without it, it is the card. -->
+    <main id="card">
+      <h1 class="visually-hidden">Yuichi Okuhama, design engineer</h1>
+      <nav id="menu" aria-label="Badge">
+        <p class="role">Design Engineer</p>
+        <button type="button" data-page="about" class="name" aria-label="About">Yuichi<br />Okuhama<span class="dest">about</span></button>
+        <button type="button" data-page="work" aria-label="Work">DG717<span class="dest">work</span></button>
+        <button type="button" data-page="built" aria-label="Built">Things I built<span class="dest">built</span></button>
+        <button type="button" data-page="contact" aria-label="Contact">Say hello<span class="dest">contact</span></button>
+        <p class="place">San Francisco</p>
+      </nav>
+    </main>
 
-    <!-- WebGL liquid/ASCII field -->
-    <canvas id="gl" aria-hidden="true"></canvas>
-    <div id="fallback-bg" aria-hidden="true" hidden></div>
+    <canvas id="badge" aria-hidden="true"></canvas>
+    <p id="hint" aria-hidden="true">Grab the badge. Tap a line to open it.</p>
 
-    <div id="app">
-      <!-- top status bar -->
-      <header id="statusbar">
-        <span class="status-left"><span class="dot" aria-hidden="true"></span>yuichi@portfolio</span>
-        <nav id="chipnav" aria-label="Sections"></nav>
-        <span class="status-right">
-          <button id="motion-toggle" class="chip" type="button" aria-pressed="true">motion: on</button>
-          <span id="clock" aria-hidden="true"></span>
-        </span>
-      </header>
-
-      <!-- panels -->
-      <main id="stage" tabindex="-1">
-        <section id="hero" class="panel is-open" aria-label="Intro">
-          <pre id="boot" aria-hidden="true"></pre>
-          <h1 id="name"></h1>
-          <p id="tagline"></p>
-          <p id="intro"></p>
-        </section>
-        <section id="built" class="panel" aria-labelledby="built-h" hidden></section>
-        <section id="work" class="panel" aria-labelledby="work-h" hidden></section>
-        <section id="study" class="panel" aria-label="Case study" hidden></section>
-        <section id="process" class="panel" aria-labelledby="process-h" hidden></section>
-        <section id="about" class="panel" aria-labelledby="about-h" hidden></section>
-        <section id="events" class="panel" aria-labelledby="events-h" hidden></section>
-        <section id="contact" class="panel" aria-labelledby="contact-h" hidden></section>
-      </main>
-
-      <!-- command line -->
-      <footer id="cli">
-        <div id="cli-log" role="log" aria-live="polite"></div>
-        <div id="cli-row">
-          <label for="cli-input" id="cli-prompt">→ ~ $</label>
-          <input id="cli-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false"
-                 placeholder="type `help` or click above" aria-label="Command input" />
-        </div>
-      </footer>
-    </div>
+    <dialog id="sheet" aria-labelledby="sheet-title">
+      <button type="button" class="close" data-close>Close</button>
+      <div class="sheet-body"></div>
+    </dialog>
   </body>
 </html>

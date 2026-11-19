@@ -10,7 +10,7 @@ export const site = {
   tagline: 'I design software, and then I build it.',
   location: 'San Francisco',
   intro:
-    'I grew up in Okinawa and live in San Francisco. I’ve designed tools for blockchain teams and a marketplace you could walk around in VR, and these days I build my own things too, like Allsquare, a bill splitter I designed and shipped by myself. I made this site from scratch as well. Move your cursor around and the background melts.',
+    'I grew up in Okinawa and live in San Francisco. I’ve designed tools for blockchain teams and a marketplace you could walk around in VR, and these days I build my own things too, like Allsquare, a bill splitter I designed and shipped by myself. I made this site from scratch as well.',
   email: 'yuokuhama@gmail.com',
   socials: [
     { label: 'LinkedIn', url: 'https://www.linkedin.com/in/yokuhama/' },
@@ -245,7 +245,7 @@ export const about = {
     ['now', 'DG717', 'Running a venue and event space for AI and developer communities in San Francisco.'],
     ['2026', 'Allsquare', 'Designed and built a bill splitter with no sign up. Live at all-sqr.com.'],
     ['2023-24', 'mahola at Crypto Garage', 'Enterprise Web3 tools: no-code contract creation and real-time transaction analysis.'],
-    ['2022', 'Netflix UI/UX Bootcamp', 'Foundational and Advanced tracks, a full year of human-centered research and design methods. The origin of the case study in ~/work/netflix.'],
+    ['2022', 'Netflix UI/UX Bootcamp', 'Foundational and Advanced tracks, a full year of human-centered research and design methods. The origin of the Netflix case study.'],
     ['2022', 'SnowX VR marketplace', 'First 3D NFT marketplace on VR. JETRO recognition, TechCrunch showcase.'],
     ['2019-21', 'B.S. Informatics, UC Irvine', 'Human-Computer Interaction focus, Donald Bren School of ICS.'],
     ['origin', 'Okinawa, Japan', 'Island-raised. Slow thinking. Long perspective. Bilingual from the start.'],
@@ -264,46 +264,7 @@ export const about = {
   ],
 };
 
-export const events = {
-  headline: 'Events at DG717.',
-  body: [
-    'I run DG717 at 717 Market Street and host events there for designers, founders, and engineers working on AI. These are the topics I keep coming back to.',
-  ],
-  themes: [
-    ['01', 'Design × AI', 'When intelligence becomes a design material'],
-    ['02', 'Blockchain UX', 'Making decentralized systems feel human'],
-    ['03', 'Emerging interfaces', 'VR, spatial computing, and what’s next'],
-    ['04', 'Cross-cultural design', 'Building for a world that isn’t one market'],
-  ],
-};
 
-export const process = {
-  headline: 'How I get from fog to shipped.',
-  intro:
-    'Every 0→1 project above ran on the Double Diamond: diverge to understand, converge on the real problem, diverge on solutions, converge on the one worth shipping. In practice it’s messy. You loop back, re-open questions, re-converge. That back and forth isn’t failure. It’s the method working.',
-  diagram: String.raw`
-             DISCOVER                       DEVELOP
-             diverge                        diverge
-
-                /\                            /\
-               /  \                          /  \
-              /    \                        /    \
-the problem  <      > ⇄ the real problem ⇄ <      >  worth shipping
-              \    /                        \    /
-               \  /                          \  /
-                \/                            \/
-
-             converge                      converge
-             DEFINE                         DELIVER
-
-      ←  the arrows run both ways. real process loops back  →`,
-  steps: [
-    ['discover', 'Interviews, shadowing, heuristic audits. Sit with the problem before touching pixels.'],
-    ['define', 'One sharp problem statement and a persona the whole team can hold in their heads.'],
-    ['develop', 'Multiple directions, prototyped where the product actually lives: in headset, in dashboard, in hand.'],
-    ['deliver', 'Ship, measure, and carry the lesson forward.'],
-  ],
-};
 
 // Things designed and built end to end. Shown first, in the BUILT panel.
 export const built = {
@@ -312,8 +273,8 @@ export const built = {
   items: [
     {
       title: 'yuichiokuhama.com',
-      desc: 'The site you’re on. A liquid simulation runs through a three pass WebGL2 pipeline and comes out as ASCII glyphs, and the terminal at the bottom is real navigation. The colors are sampled from photos of 19th century bingata robes from Okinawa.',
-      stack: ['Vanilla JS', 'WebGL2 / GLSL', 'Vite', 'Motion', 'GitHub Pages'],
+      desc: 'The site you’re on. One badge on a lanyard that you can grab and swing, and every line on it opens a page. I modeled the card in Blender and draw it with three.js. The colors come from photos of 19th century bingata robes from Okinawa.',
+      stack: ['three.js', 'Blender', 'Vite', 'GitHub Pages'],
       links: [
         ['live', 'https://yuichiokuhama.com'],
         ['source', 'https://github.com/yuichi-9621/yuichi-9621.github.io'],
@@ -329,11 +290,11 @@ export const built = {
   craft: {
     title: 'how this site is made',
     points: [
-      'No framework. Under 45 kB of JavaScript, gzipped.',
-      'Three shader passes: a pointer trail, the liquid scene, then the ASCII pass.',
-      'Turns the animation off when your system asks for reduced motion, and `motion off` does the same.',
-      'Skip link, real buttons, and focus moves to the heading of every panel you open.',
-      'Works without WebGL. The colors fall back to plain CSS.',
+      'Built around 引き算, the Japanese idea of making something better by taking things away. One object on the page, four colors, one typeface.',
+      'No framework. The swing is a small physics sim of a few rope points and a rigid card, not a physics engine.',
+      'The card and clip are modeled in Blender from a script that lives in the repo.',
+      'Holds still if your system asks for reduced motion.',
+      'Every line on the badge is also a real button, so it works with a keyboard and a screen reader, and without WebGL.',
     ],
   },
 };
@@ -358,12 +319,4 @@ export const sideProjects = [
     tags: ['Case study', 'Nonprofit'],
     link: '',
   },
-];
-
-// Lines printed by the boot sequence in the hero terminal.
-export const bootLines = [
-  'yuichi@portfolio:~$ ./hello',
-  'mounting /okinawa .............. ok',
-  'brewing sanpin tea ............. ok',
-  'ready.',
 ];
