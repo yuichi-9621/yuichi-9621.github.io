@@ -6,7 +6,9 @@
 import { Vector3, Quaternion, Matrix4 } from 'three';
 
 const CARD_H = 2.25;
-export const ANCHOR_Y = 1.916;         // top bar of the webbing loop, in card space (tools/badge.py prints it)
+export const ANCHOR_Y = 1.916;  // top bar of the webbing loop, in card space (tools/badge.py prints it)
+export const SEWN = 0.3;        // the stitched double layer above the bar: stiff, so it moves with the clasp
+const HANG_Y = ANCHOR_Y + SEWN; // the rope hangs the badge from the top of the stitching
 const FRONT = 0.35;             // the front particle sits this far in +z
 const ROPE = 4;                 // rope points below the fixed anchor
 const SEG = 0.55;               // rest length of each rope segment
@@ -20,7 +22,7 @@ export function createSim(anchor) {
   const last = rope[ROPE - 1].p;
   // card triangle in its rest pose, hung from the last rope point
   const top = particle(last.x + 0.3, last.y - 0.2, 0);
-  const bot = particle(top.p.x, top.p.y - (ANCHOR_Y + CARD_H / 2), 0);
+  const bot = particle(top.p.x, top.p.y - (HANG_Y + CARD_H / 2), 0);
   const mid0 = top.p.clone().add(bot.p).multiplyScalar(0.5);
   const front = particle(mid0.x, mid0.y, FRONT);
   const body = [top, bot, front];
@@ -34,7 +36,7 @@ export function createSim(anchor) {
   for (const [a, b] of [[top, bot], [top, front], [bot, front]]) links.push([a, b, a.p.distanceTo(b.p), false]);
 
   // card-space position of each body particle, for orientation and dragging
-  const local = [new Vector3(0, ANCHOR_Y, 0), new Vector3(0, ANCHOR_Y - (ANCHOR_Y + CARD_H / 2), 0), null];
+  const local = [new Vector3(0, HANG_Y, 0), new Vector3(0, -CARD_H / 2, 0), null];
   local[2] = new Vector3(0, (local[0].y + local[1].y) / 2, FRONT);
 
   let drag = null; // { target: Vector3, offset: Vector3 (card space) }

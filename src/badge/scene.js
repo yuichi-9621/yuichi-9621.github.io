@@ -2,26 +2,16 @@
 import {
   WebGLRenderer, Scene, PerspectiveCamera, CanvasTexture, SRGBColorSpace, MeshPhysicalMaterial,
   MeshStandardMaterial, Color, Raycaster, Vector2, Vector3, Plane, BufferGeometry, BufferAttribute,
-  Mesh, DoubleSide, CatmullRomCurve3, Quaternion, PMREMGenerator, DirectionalLight, AmbientLight, RepeatWrapping,
+  Mesh, DoubleSide, PMREMGenerator, DirectionalLight, AmbientLight, RepeatWrapping,
 } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { createSim, ANCHOR_Y } from './sim.js';
 import { FACE_W, FACE_H, drawFront, drawBack, lineAt, loadFaceFonts } from './face.js';
 import { BAND_TILE_W, BAND_TILE_H, RIB_PX, drawBand, drawWeaveNormal } from './band.js';
+import { createRibbon, BAND_W, BAND_TILE, BAND_SAMPLES, ACROSS, COLS, WRAP_R, SEWN } from './ribbon.js';
 
 const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-const BAND_W = 0.26;
-const BAND_TILE = BAND_W * (BAND_TILE_H / BAND_TILE_W); // world length of one print repeat
-const BAND_SAMPLES = 40;
-// across the band: the middle lies flat and the edges roll back a little,
-// as webbing does, so light falls off toward the edges instead of looking flat
-const ACROSS = [-1, -0.45, 0.45, 1];
-const ROLL = BAND_W * 0.07;
-// where the band meets the clasp: it comes down over the loop's top bar,
-// wraps under it, and runs back up behind itself, sewn down (the box stitch)
-const WRAP_R = 0.021;            // the bar's wire plus the webbing's thickness
-const SEWN = 0.3;                // the doubled, stitched length (band.js STITCH)
 
 // Fetch the model as plain bytes and parse it here, so no data: URLs are ever
 // fetched (some hosts' content policies refuse those). The preview build can
@@ -122,7 +112,6 @@ export async function createBadge(canvas, { face, onOpen, reducedMotion }) {
       side: DoubleSide,
     })
   );
-  const COLS = ACROSS.length;
   const pos = new Float32Array((BAND_SAMPLES + 1) * COLS * 3);
   const uvs = new Float32Array((BAND_SAMPLES + 1) * COLS * 2);
   band.geometry.setAttribute('position', new BufferAttribute(pos, 3));
@@ -137,7 +126,7 @@ export async function createBadge(canvas, { face, onOpen, reducedMotion }) {
   band.geometry.setIndex(idx);
   scene.add(band);
 
-  const sim = createSim(new Vector3(0, 4.45, 0)); // high enough that the card still hangs near the middle
+  const sim = createSim(new Vector3(0, 4.75, 0)); // high enough that the card still hangs near the middle
   if (reducedMotion) {
     sim.setCalm(true);
     for (let i = 0; i < 600; i++) sim.step(1 / 60); // settle off screen: no drop-in
@@ -174,55 +163,9 @@ export async function createBadge(canvas, { face, onOpen, reducedMotion }) {
     card.add(new Mesh(g, band.material));
   }
 
-  const curve = new CatmullRomCurve3([], false, 'chordal');
-  const tan = new Vector3(), side = new Vector3(), view = new Vector3(), back = new Vector3();
-  const cardSide = new Vector3(), cross = new Vector3(), twist = new Quaternion();
-  const sewnTop = new Vector3(), sewnEnd = new Vector3();
+  const ribbon = createRibbon();
   function updateBand() {
-    // the free band ends on the front of the loop's bar, with its sewn length
-    // lying straight along the card, so it meets the fold cleanly
-    card.updateMatrixWorld();
-    card.localToWorld(sewnTop.set(0, ANCHOR_Y + SEWN, WRAP_R));
-    card.localToWorld(sewnEnd.set(0, ANCHOR_Y, WRAP_R));
-    const bp = sim.bandPoints();
-    curve.points = [...bp.slice(0, -1).map((p) => p.clone()), sewnTop.clone(), sewnEnd.clone()];
-    curve.updateArcLengths(); // the cache would otherwise keep last frame's lengths
-    const pts = curve.getSpacedPoints(BAND_SAMPLES);
-    const len = curve.getLength();
-    // the card's -x: where the band's ACROSS +1 edge lies when it meets the bar
-    cardSide.set(-1, 0, 0).applyQuaternion(card.quaternion);
-    for (let i = 0; i <= BAND_SAMPLES; i++) {
-      const p = pts[i];
-      const k = i / BAND_SAMPLES;
-      curve.getTangentAt(k, tan);
-      view.subVectors(camera.position, p).normalize();
-      side.crossVectors(tan, view).normalize();
-      // up top the band faces you; lower down it twists to lie flat on the bar
-      let turn = Math.min(1, Math.max(0, (k - 0.55) / 0.4));
-      turn = turn * turn * (3 - 2 * turn);
-      back.copy(cardSide).addScaledVector(tan, -cardSide.dot(tan));
-      if (back.lengthSq() > 1e-4 && turn > 0) {
-        back.normalize();
-        const ang = Math.atan2(tan.dot(cross.crossVectors(side, back)), side.dot(back));
-        side.applyQuaternion(twist.setFromAxisAngle(tan, ang * turn));
-      }
-      side.multiplyScalar(BAND_W / 2);
-      back.crossVectors(side, tan).normalize(); // the band's own normal
-      // print runs down from the top; measured from the clasp end so it doesn't crawl as the band stretches
-      const v = (len - k * len) / BAND_TILE;
-      const rollK = 1 - turn;                   // the sewn end lies flat
-      for (let c = 0; c < COLS; c++) {
-        const a = ACROSS[c];
-        const roll = Math.abs(a) === 1 ? -ROLL * rollK : 0;
-        const o = (i * COLS + c) * 3;
-        pos[o] = p.x + side.x * a + back.x * roll;
-        pos[o + 1] = p.y + side.y * a + back.y * roll;
-        pos[o + 2] = p.z + side.z * a + back.z * roll;
-        // u: 1 on the screen-right edge (ACROSS -1), so the print reads top to bottom, unmirrored
-        uvs[(i * COLS + c) * 2] = 0.5 - 0.5 * a;
-        uvs[(i * COLS + c) * 2 + 1] = v;
-      }
-    }
+    ribbon.layout(pos, uvs, sim.bandPoints(), card.position, card.quaternion, camera.position);
     band.geometry.attributes.position.needsUpdate = true;
     band.geometry.attributes.uv.needsUpdate = true;
     band.geometry.computeVertexNormals();
