@@ -82,7 +82,7 @@ Hover or focus: line text and destination word turn yamabuki, and a 16 x 16 yama
 
 ## 6. Badge back
 
-Face fill ai. 奥浜 stacked vertically, 360 px, 700, cotton. 引き算 at baseline y=1300, 30 px, 700, tracked, and THE BEAUTY OF SUBTRACTION under it in mono 22 px, both cotton-dim. Not clickable.
+Face fill ai. 奥浜 stacked vertically, 360 px, 700, cotton. 引き算 at baseline y=1300, 30 px, 700, tracked, and THE ART OF SUBTRACTION under it in mono 22 px, both cotton-dim. Not clickable.
 
 The card itself is thick glossy PVC (0.032 units, bevelled edges): a clear coat over the print, so highlights slide across it as it swings.
 

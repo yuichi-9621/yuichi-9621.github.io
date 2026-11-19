@@ -119,7 +119,7 @@ export function drawBack(ctx) {
   ctx.fillText('引き算', 512 + 6, 1300);
   if ('letterSpacing' in ctx) ctx.letterSpacing = '4px';
   ctx.font = `400 22px ${mono}`;
-  ctx.fillText('THE BEAUTY OF SUBTRACTION', 512 + 2, 1352);
+  ctx.fillText('THE ART OF SUBTRACTION', 512 + 2, 1352);
   if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
   ctx.restore();
 }
