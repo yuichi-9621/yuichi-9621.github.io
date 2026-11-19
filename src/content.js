@@ -28,76 +28,6 @@ export const beliefs = [
 
 export const projects = [
   {
-    id: 'snowx',
-    index: '01',
-    title: 'SnowX: 3D NFT Marketplace in VR',
-    org: 'SnowX',
-    year: '2022',
-    tags: ['VR', 'Zero-to-One', 'Web3'],
-    summary:
-      'The first 3D NFT marketplace built for virtual reality. I led product design from zero to launch. Recognized by JETRO, showcased at TechCrunch.',
-    meta: [
-      ['role', 'UX Designer'],
-      ['timeline', '2022 · 6 months'],
-      ['team', '2 designers · 4 engineers · PM'],
-      ['platform', 'Oculus / SideQuest VR'],
-    ],
-    lede: 'In 2022, every NFT marketplace looked the same: a grid of thumbnails, a price, a "connect wallet" button. SnowX asked a different question. What if you could stand inside a gallery instead of scrolling past one?',
-    quote: '“We weren’t designing a store. We were designing a place.”',
-    phases: [
-      {
-        name: 'discover',
-        mode: 'diverge',
-        heading: 'Listening before designing',
-        body: 'I started where I always start: with people, not pixels. We ran 14 user interviews across two groups that almost never overlap. Seasoned VR users who had never touched crypto, and NFT collectors who had never owned a headset. The gap between them was the whole project.',
-        points: [
-          'VR-native users got motion sick from the floating menus other Web3 apps used in headset.',
-          'NFT collectors couldn’t tell what they actually owned once an asset was “in a room.”',
-          'Both groups distrusted wallet connection flows, the single biggest drop-off point.',
-        ],
-      },
-      {
-        name: 'define',
-        mode: 'converge',
-        heading: 'Narrowing to the real problem',
-        body: 'How might we let people buy and own 3D NFTs with total confidence, inside an immersive space that feels comfortable to first-time VR users and trustworthy to first-time collectors?',
-        points: [
-          'Persona: Mika, 27, VR native. “I love being inside things. I just don’t want to do my taxes while I’m in there.”',
-          'Persona: Daniel, 34, collector. “If I can’t verify what I own, it’s not an asset. It’s a screenshot.”',
-        ],
-      },
-      {
-        name: 'develop',
-        mode: 'diverge',
-        heading: 'Designing the way out of the spreadsheet',
-        body: 'We explored three spatial metaphors (museum, bazaar, personal vault), prototyped them in Figma, then grey-boxed them in Unity so we could feel them in headset. A layout that reads fine on a monitor can be nauseating at 1:1 scale.',
-        points: [
-          'Diegetic UI: every control lived on a physical-feeling object. No floating panels.',
-          'Ownership as light: NFTs you owned glowed warm, and everything else stayed cool.',
-          'Wallet flow before entry: finance friction moved to a calm antechamber, so gas fees never broke immersion.',
-        ],
-      },
-      {
-        name: 'deliver',
-        mode: 'converge',
-        heading: 'Shipping & what it earned',
-        body: 'We launched on SideQuest. The product was acknowledged by JETRO (the Japanese government’s trade organization) and showcased at TechCrunch, validating the bet that immersion could make Web3 feel human.',
-        points: [
-          'First 3D NFT marketplace shipped on VR.',
-          '68% drop in wallet-connection abandonment vs. our v0 flow.',
-          'JETRO recognition + TechCrunch showcase.',
-        ],
-      },
-    ],
-    metrics: [
-      ['1st', '3D NFT marketplace on VR'],
-      ['68%', 'less wallet-connect abandonment'],
-      ['JETRO', 'recognition + TechCrunch showcase'],
-    ],
-    reflection:
-      'SnowX taught me that the hardest part of emerging tech isn’t the technology. It’s translation. A great interface doesn’t ask people to learn a new mental model. It meets them inside the one they already have, and quietly does the hard work underneath.',
-  },
-  {
     id: 'mahola',
     index: '02',
     title: 'mahola: Enterprise Blockchain, No Code',
@@ -172,7 +102,7 @@ export const projects = [
     index: '03',
     title: 'Netflix NMHP: Homepage Redesign',
     org: 'Self-initiated case study',
-    year: 'Case study',
+    year: '2022',
     tags: ['Double Diamond', 'UX Research', 'Consumer'],
     summary:
       'A complete Double Diamond run in the open: redesigning the non-member homepage so potential subscribers can see the unique stories only Netflix tells, before being asked to pay.',
@@ -232,6 +162,76 @@ export const projects = [
     ],
     reflection:
       'Run as the real, sometimes-messy process of moving from a vague hunch to a defensible design, not a polished after-the-fact story.',
+  },
+  {
+    id: 'snowx',
+    index: '01',
+    title: 'SnowX: 3D NFT Marketplace in VR',
+    org: 'SnowX',
+    year: '2022',
+    tags: ['VR', 'Zero-to-One', 'Web3'],
+    summary:
+      'The first 3D NFT marketplace built for virtual reality. I led product design from zero to launch. Recognized by JETRO, showcased at TechCrunch.',
+    meta: [
+      ['role', 'UX Designer'],
+      ['timeline', '2022 · 6 months'],
+      ['team', '2 designers · 4 engineers · PM'],
+      ['platform', 'Oculus / SideQuest VR'],
+    ],
+    lede: 'In 2022, every NFT marketplace looked the same: a grid of thumbnails, a price, a "connect wallet" button. SnowX asked a different question. What if you could stand inside a gallery instead of scrolling past one?',
+    quote: '“We weren’t designing a store. We were designing a place.”',
+    phases: [
+      {
+        name: 'discover',
+        mode: 'diverge',
+        heading: 'Listening before designing',
+        body: 'I started where I always start: with people, not pixels. We ran 14 user interviews across two groups that almost never overlap. Seasoned VR users who had never touched crypto, and NFT collectors who had never owned a headset. The gap between them was the whole project.',
+        points: [
+          'VR-native users got motion sick from the floating menus other Web3 apps used in headset.',
+          'NFT collectors couldn’t tell what they actually owned once an asset was “in a room.”',
+          'Both groups distrusted wallet connection flows, the single biggest drop-off point.',
+        ],
+      },
+      {
+        name: 'define',
+        mode: 'converge',
+        heading: 'Narrowing to the real problem',
+        body: 'How might we let people buy and own 3D NFTs with total confidence, inside an immersive space that feels comfortable to first-time VR users and trustworthy to first-time collectors?',
+        points: [
+          'Persona: Mika, 27, VR native. “I love being inside things. I just don’t want to do my taxes while I’m in there.”',
+          'Persona: Daniel, 34, collector. “If I can’t verify what I own, it’s not an asset. It’s a screenshot.”',
+        ],
+      },
+      {
+        name: 'develop',
+        mode: 'diverge',
+        heading: 'Designing the way out of the spreadsheet',
+        body: 'We explored three spatial metaphors (museum, bazaar, personal vault), prototyped them in Figma, then grey-boxed them in Unity so we could feel them in headset. A layout that reads fine on a monitor can be nauseating at 1:1 scale.',
+        points: [
+          'Diegetic UI: every control lived on a physical-feeling object. No floating panels.',
+          'Ownership as light: NFTs you owned glowed warm, and everything else stayed cool.',
+          'Wallet flow before entry: finance friction moved to a calm antechamber, so gas fees never broke immersion.',
+        ],
+      },
+      {
+        name: 'deliver',
+        mode: 'converge',
+        heading: 'Shipping & what it earned',
+        body: 'We launched on SideQuest. The product was acknowledged by JETRO (the Japanese government’s trade organization) and showcased at TechCrunch, validating the bet that immersion could make Web3 feel human.',
+        points: [
+          'First 3D NFT marketplace shipped on VR.',
+          '68% drop in wallet-connection abandonment vs. our v0 flow.',
+          'JETRO recognition + TechCrunch showcase.',
+        ],
+      },
+    ],
+    metrics: [
+      ['1st', '3D NFT marketplace on VR'],
+      ['68%', 'less wallet-connect abandonment'],
+      ['JETRO', 'recognition + TechCrunch showcase'],
+    ],
+    reflection:
+      'SnowX taught me that the hardest part of emerging tech isn’t the technology. It’s translation. A great interface doesn’t ask people to learn a new mental model. It meets them inside the one they already have, and quietly does the hard work underneath.',
   },
 ];
 
