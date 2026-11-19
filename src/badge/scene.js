@@ -39,7 +39,7 @@ export async function createBadge(canvas, { face, onOpen, reducedMotion }) {
 
   const scene = new Scene();
   const camera = new PerspectiveCamera(25, 1, 0.1, 100);
-  camera.position.set(0, 0.7, 9.5); // raised a little so the strands show above the clasp
+  camera.position.set(0, 0.7, 9); // raised a little so the strands show above the clasp
   scene.environment = new PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
   scene.add(new AmbientLight(0xffffff, 0.45));
   const key = new DirectionalLight(0xfff4e0, 1.6); // warm, from the upper left, so the coat catches a highlight
@@ -181,9 +181,9 @@ export async function createBadge(canvas, { face, onOpen, reducedMotion }) {
     const w = canvas.clientWidth, h = canvas.clientHeight;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
-    // close enough that the card fills about half the height; on a narrow
-    // phone, back off just enough to keep the card's width on screen
-    camera.position.z = Math.max(9.5, 4.4 / camera.aspect);
+    // as big as it can be while the whole badge fits: the card, the clasp and
+    // a little lanyard top to bottom, and the card plus room to swing across
+    camera.position.z = Math.max(9, 4.8 / camera.aspect);
     camera.updateProjectionMatrix();
   }
   new ResizeObserver(resize).observe(canvas);
