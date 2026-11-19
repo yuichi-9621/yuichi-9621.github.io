@@ -283,7 +283,6 @@ export const built = {
       stack: ['three.js', 'Blender', 'Vite', 'GitHub Pages'],
       links: [
         ['live', 'https://yuichiokuhama.com'],
-        ['source', 'https://github.com/yuichi-9621/yuichi-9621.github.io'],
       ],
     },
     {
@@ -298,7 +297,7 @@ export const built = {
     points: [
       'Built around 引き算, the Japanese idea of making something better by taking things away. One object on the page, four colors, one typeface.',
       'No framework. The swing is a small physics sim of a few rope points and a rigid card, not a physics engine.',
-      'The card and clip are modeled in Blender from a script that lives in the repo.',
+      'The card and clip are modeled in Blender from a script, not by hand.',
       'Holds still if your system asks for reduced motion.',
       'Every line on the badge is also a real button, so it works with a keyboard and a screen reader, and without WebGL.',
     ],
