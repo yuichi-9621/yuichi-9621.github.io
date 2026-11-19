@@ -10,7 +10,11 @@ const buttonFor = (key) => menu.querySelector(`[data-page="${key}"]`);
 const sheet = createSheet({
   onChange(key) {
     const hash = key ? `#${key}` : ' ';
-    if (location.hash !== hash.trim()) history.replaceState(null, '', key ? hash : location.pathname);
+    try {
+      if (location.hash !== hash.trim()) history.replaceState(null, '', key ? hash : location.pathname);
+    } catch {
+      /* some embedded frames refuse history changes; the sheet still works */
+    }
     if (key) track(`/${PAGES.includes(key) ? 'page' : 'study'}/${key}`, key);
   },
 });
@@ -52,11 +56,25 @@ if (hasGL) {
     })
     .catch((err) => {
       console.warn('badge fell back to the flat card', err);
+      if (import.meta.env.VITE_PREVIEW) showPreviewNote(`3D badge off: ${err?.message || err}`);
       document.documentElement.classList.remove('gl');
     });
+} else if (import.meta.env.VITE_PREVIEW) {
+  showPreviewNote('3D badge off: this browser has no WebGL');
 }
 
 // deep links: #about, #work, #built, #contact, or a case study (#snowx)
 const initial = location.hash.slice(1);
 if (PAGES.includes(initial) || projects.some((p) => p.id === initial)) sheet.open(initial, buttonFor(initial) || buttonFor('work'));
 else track('/', 'home');
+
+// Preview builds only: say why the 3D badge didn't start, so a screenshot shows it.
+function showPreviewNote(text) {
+  const p = Object.assign(document.createElement('p'), { textContent: text });
+  p.style.cssText = 'position:fixed;left:0;right:0;bottom:12px;margin:0;text-align:center;font-size:12px;color:var(--ink-dim)';
+  document.body.append(p);
+}
+if (import.meta.env.VITE_PREVIEW) {
+  addEventListener('error', (e) => showPreviewNote(`Script error: ${e.message}`));
+  addEventListener('unhandledrejection', (e) => showPreviewNote(`Script error: ${e.reason?.message || e.reason}`));
+}

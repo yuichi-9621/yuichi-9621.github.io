@@ -13,6 +13,25 @@ const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n
 const BAND_W = 0.16;
 const BAND_SAMPLES = 32;
 
+// Fetch the model as plain bytes and parse it here, so no data: URLs are ever
+// fetched (some hosts' content policies refuse those). The preview build can
+// point at a base64 text copy instead, since it can't serve .glb files.
+async function loadModel() {
+  const file = import.meta.env.VITE_BADGE_MODEL || 'badge.glb';
+  const res = await fetch(`${import.meta.env.BASE_URL}${file}`);
+  if (!res.ok) throw new Error(`badge model: ${res.status}`);
+  let buf;
+  if (file.endsWith('.txt')) {
+    const b = atob((await res.text()).trim());
+    const bytes = new Uint8Array(b.length);
+    for (let i = 0; i < b.length; i++) bytes[i] = b.charCodeAt(i);
+    buf = bytes.buffer;
+  } else {
+    buf = await res.arrayBuffer();
+  }
+  return new GLTFLoader().parseAsync(buf, '');
+}
+
 export async function createBadge(canvas, { face, onOpen, reducedMotion }) {
   const renderer = new WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
@@ -46,7 +65,7 @@ export async function createBadge(canvas, { face, onOpen, reducedMotion }) {
   const backTex = tex(backCanvas);
 
   // model (made in Blender, see tools/badge.py)
-  const gltf = await new GLTFLoader().loadAsync(`${import.meta.env.BASE_URL}badge.glb`);
+  const gltf = await loadModel();
   const card = gltf.scene;
   const ai = new Color(css('--ai'));
   let frontMesh = null;
