@@ -72,7 +72,7 @@ Face fill ai. Text cotton, left aligned at x=96. Destination labels right aligne
 | Hairline | | y=952 | | |
 | Contact | Say hello | baseline y=1044 | 56, 400 | Contact |
 | Hairline | | y=1096 | | |
-| Waves | five thin sine lines across the full width, y 1150 to 1318 | 3 px, cotton fading from 30% to 14% | | none |
+| Waves | five thin sine lines across the full width, y 1134 to 1294, clear of the hairline above and the bottom line below | 3 px, cotton fading from 30% to 14% | | none |
 | Bottom line | FROM OKINAWA, JAPAN | baseline y=1344 | mono 26, 0.06em, cotton-dim | none |
 
 Hit areas span x 64 to 960. Name: y 408 to 784. Rows: 808 to 952, 952 to 1096. The space below stays empty on purpose. Each row is 144 px, which is 45 CSS px when the badge renders 320 px wide. Don't render it narrower.

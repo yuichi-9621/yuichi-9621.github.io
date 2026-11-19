@@ -87,7 +87,7 @@ export function drawFront(ctx, { name, role, company, place, active = null, focu
   ctx.save();
   ctx.lineWidth = 3;
   for (let k = 0; k < 5; k++) {
-    const y0 = 1150 + k * 42, amp = 16, len = 150 + k * 6;
+    const y0 = 1146 + k * 34, amp = 12, len = 150 + k * 6; // ends above the bottom line
     ctx.strokeStyle = `rgb(241 234 214 / ${0.3 - k * 0.04})`;
     ctx.beginPath();
     for (let x = -20; x <= FACE_W + 20; x += 4) {
