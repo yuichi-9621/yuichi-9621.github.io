@@ -1,4 +1,4 @@
-// The lanyard: woven polyester webbing with an intro printed on it.
+// The lanyard: woven polyester webbing with my motto printed on it.
 // One tile repeats along the band. The weave is drawn over the print, so the
 // ribs run through the letters the way ink sits in real fabric, and a small
 // normal map gives the ribs depth when the light rakes across them.
@@ -9,7 +9,8 @@ export const RIB_PX = 6;          // one woven rib, px along the band
 
 const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 
-const WORDS = ['YUICHI OKUHAMA', 'DESIGN ENGINEER', 'SAN FRANCISCO', 'FROM OKINAWA', '引き算'];
+// 引き算, the art of subtraction, in English and Japanese, repeated down the band
+const WORDS = ['SUBTRACT', '引き算', 'SUBTRACT', '引き算', 'SUBTRACT', '引き算'];
 
 // a small seeded random, so the fibers land the same way every load
 function rng(seed) {
