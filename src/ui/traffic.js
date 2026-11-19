@@ -72,9 +72,9 @@ export function createTraffic(print) {
     print('fetching…');
     try {
       const res = await fetch(`${BLOB_URL}?t=${Date.now()}`, { cache: 'no-store' });
-      if (!res.ok) throw new Error(`snapshot not found (HTTP ${res.status}) — has the workflow run yet?`);
+      if (!res.ok) throw new Error(`snapshot not found (HTTP ${res.status}). has the workflow run yet?`);
       const snap = await decrypt(await res.text(), pass).catch(() => {
-        throw new Error('decrypt failed — wrong passphrase? re-save with `traffic key <passphrase>`');
+        throw new Error('decrypt failed. wrong passphrase? re-save with `traffic key <passphrase>`');
       });
       const r = snap.ranges[days];
       print(

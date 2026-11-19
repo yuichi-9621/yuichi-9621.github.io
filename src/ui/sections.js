@@ -116,8 +116,8 @@ export function renderSections({ onCardHover, openStudy }) {
   document.getElementById('contact').innerHTML = `
     <h2 class="sec-head" id="contact-h"><b>~/contact</b> · open a channel</h2>
     <div class="prose">
-      <p class="lead">Let’s build something worth building.</p>
-      <p>Open to product design roles, advisory work, and collaborations at the edge of AI, blockchain, and human experience.</p>
+      <p class="lead">Say hi.</p>
+      <p>I’m looking for a design engineering role, and I’m always up for a good side project. Email is the fastest way to reach me.</p>
       <dl class="kv">
         ${site.socials
           .map(

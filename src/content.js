@@ -6,11 +6,11 @@
 export const site = {
   name: 'Yuichi Okuhama',
   handle: 'yuichi',
-  role: 'Product Designer',
-  tagline: 'Design that makes complex things feel inevitable.',
+  role: 'Design Engineer',
+  tagline: 'I design software, and then I build it.',
   location: 'San Francisco',
   intro:
-    'I take vague, complicated problems in AI, blockchain, and developer tools, and find the version that feels obvious. The goal is always the same: software people understand the moment they touch it.',
+    'I grew up in Okinawa and live in San Francisco. I’ve designed tools for blockchain teams and a marketplace you could walk around in VR, and these days I build my own things too, like Allsquare, a bill splitter I designed and shipped by myself. I made this site from scratch as well. Move your cursor around and the background melts.',
   email: 'yuokuhama@gmail.com',
   socials: [
     { label: 'LinkedIn', url: 'https://www.linkedin.com/in/yokuhama/' },
@@ -66,7 +66,7 @@ export const projects = [
         body: 'We explored three spatial metaphors (museum, bazaar, personal vault), prototyped them in Figma, then grey-boxed them in Unity so we could feel them in headset. A layout that reads fine on a monitor can be nauseating at 1:1 scale.',
         points: [
           'Diegetic UI: every control lived on a physical-feeling object. No floating panels.',
-          'Ownership as light: NFTs you owned glowed warm; others were cool-toned.',
+          'Ownership as light: NFTs you owned glowed warm, and everything else stayed cool.',
           'Wallet flow before entry: finance friction moved to a calm antechamber, so gas fees never broke immersion.',
         ],
       },
@@ -105,7 +105,7 @@ export const projects = [
       ['context', 'Crypto Garage · Enterprise B2B'],
       ['surface', 'Web dashboard + no-code builder'],
     ],
-    lede: 'Crypto Garage’s enterprise clients (banks, logistics firms, payment companies) wanted blockchain without hiring smart-contract engineers. Business teams understood exactly what they needed the chain to do; they just had no way to express it.',
+    lede: 'Crypto Garage’s enterprise clients (banks, logistics firms, payment companies) wanted blockchain without hiring smart-contract engineers. Business teams understood exactly what they needed the chain to do. They just had no way to express it.',
     quote: '“The challenge wasn’t simplifying blockchain. It was respecting how much these teams already knew about everything except the chain.”',
     phases: [
       {
@@ -184,7 +184,7 @@ export const projects = [
         heading: 'Finding the real friction',
         body: 'A structured heuristic evaluation against Nielsen’s ten heuristics, plus interviews with 6 people who had cancelled or never subscribed, to find the emotional barrier, not just the functional one.',
         points: [
-          'The page spoke in plans and tiers; users spoke in “is there anything I actually want to watch?”',
+          'The page spoke in plans and tiers. Users spoke in “is there anything I actually want to watch?”',
           'Key insight: curiosity → paywall → lost curiosity. The page killed desire at the exact moment it should have built it.',
         ],
       },
@@ -229,20 +229,21 @@ export const projects = [
 ];
 
 export const about = {
-  headline: 'I design for humans, not screens.',
+  headline: 'Hi, I’m Yuichi.',
   body: [
-    'Okinawa-raised, San Francisco-based. I design AI experiences, blockchain platforms, and developer tools: products where five tools got stitched together and someone has to make it feel like one.',
-    'Japanese craft taught me that everyday objects should be a quiet pleasure to use. So I sit with the problem first, then find the version that feels simple. Not dumbed down. Clear, and worth keeping.',
+    'I grew up in Okinawa, studied HCI at UC Irvine, and live in San Francisco. I like problems where something powerful is hard to use: blockchain contracts, VR, and now AI tools. My job is finding the version that makes sense the first time you touch it, and more and more, I build that version myself.',
+    'By day I run DG717, a venue and coworking space at 717 Market Street, where I host events for AI startups and developer communities. Growing up around Japanese craft left me with one simple belief: everyday things should be a quiet pleasure to use.',
   ],
   human:
-    'AI can generate screens. It can’t sit in a room with a logistics manager, notice what she’s afraid of, and design the guardrail that lets her trust an irreversible system. The more software machines write, the more the human parts become the work: taste, judgment, translation, care. That’s the part I do.',
+    'Tools that write code keep getting better. Deciding what’s worth building, and how it should feel in someone’s hands, is still a human job. That’s the part I care about most.',
   pillars: [
-    ['Mental models', 'Untangling vague problems into the most accessible flow, so people get value on first touch.'],
-    ['Craft + business', 'Pixel-level care, balanced against speed and the bottom line. Pretty UI that also ships and pays off.'],
-    ['End to end', 'Idea → UX → pixel-perfect execution, driven to the ship line alongside engineers.'],
+    ['Make it make sense', 'I untangle messy problems until the flow feels obvious on first use.'],
+    ['Sweat the details', 'Readable type, fast pages, and motion that helps instead of showing off.'],
+    ['Ship it', 'I take ideas from a sketch to working code, and I’m happy in the repo next to engineers.'],
   ],
   timeline: [
-    ['now', 'Creative tech events', 'Curating a series at the intersection of design, AI, and emerging technology in San Francisco.'],
+    ['now', 'DG717', 'Running a venue and event space for AI and developer communities in San Francisco.'],
+    ['2026', 'Allsquare', 'Designed and built a bill splitter with no sign up. Live at all-sqr.com.'],
     ['2023-24', 'mahola at Crypto Garage', 'Enterprise Web3 tools: no-code contract creation and real-time transaction analysis.'],
     ['2022', 'Netflix UI/UX Bootcamp', 'Foundational and Advanced tracks, a full year of human-centered research and design methods. The origin of the case study in ~/work/netflix.'],
     ['2021', 'SnowX VR marketplace', 'First 3D NFT marketplace on VR. JETRO recognition, TechCrunch showcase.'],
@@ -258,14 +259,15 @@ export const about = {
     'Design systems',
     'Figma',
     'VR / spatial UX',
-    'Front-end collaboration',
+    'React + TypeScript',
+    'WebGL / GLSL',
   ],
 };
 
 export const events = {
-  headline: 'Shaping the conversation.',
+  headline: 'Events at DG717.',
   body: [
-    'I run a recurring creative tech event series in San Francisco, bringing together designers, founders, and technologists exploring what design means when AI is doing half the work.',
+    'I run DG717 at 717 Market Street and host events there for designers, founders, and engineers working on AI. These are the topics I keep coming back to.',
   ],
   themes: [
     ['01', 'Design × AI', 'When intelligence becomes a design material'],
@@ -278,7 +280,7 @@ export const events = {
 export const process = {
   headline: 'How I get from fog to shipped.',
   intro:
-    'Every 0→1 project above ran on the Double Diamond: diverge to understand, converge on the real problem, diverge on solutions, converge on the one worth shipping. In practice it’s messy. You loop back, re-open questions, re-converge. That back-and-forth isn’t failure; it’s the method working.',
+    'Every 0→1 project above ran on the Double Diamond: diverge to understand, converge on the real problem, diverge on solutions, converge on the one worth shipping. In practice it’s messy. You loop back, re-open questions, re-converge. That back and forth isn’t failure. It’s the method working.',
   diagram: String.raw`
              DISCOVER                       DEVELOP
              diverge                        diverge
@@ -333,11 +335,8 @@ export const sideProjects = [
 
 // Lines printed by the boot sequence in the hero terminal.
 export const bootLines = [
-  'yuichi@portfolio:~$ ./init --mode=liquid',
+  'yuichi@portfolio:~$ ./hello',
   'mounting /okinawa .............. ok',
   'brewing sanpin tea ............. ok',
-  'aligning to the 8pt grid ....... ok',
-  'kerning feelings ............... ok',
-  'unread figma comments (47) ..... ignored',
-  'ready. (yes, it’s in the latest file. promise.)',
+  'ready.',
 ];
