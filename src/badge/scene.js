@@ -8,12 +8,16 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { createSim } from './sim.js';
 import { FACE_W, FACE_H, drawFront, drawBack, lineAt, loadFaceFonts } from './face.js';
-import { BAND_TILE_W, BAND_TILE_H, drawBand } from './band.js';
+import { BAND_TILE_W, BAND_TILE_H, RIB_PX, drawBand, drawWeaveNormal } from './band.js';
 
 const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-const BAND_W = 0.22;
+const BAND_W = 0.26;
 const BAND_TILE = BAND_W * (BAND_TILE_H / BAND_TILE_W); // world length of one print repeat
-const BAND_SAMPLES = 32;
+const BAND_SAMPLES = 40;
+// across the band: the middle lies flat and the edges roll back a little,
+// as webbing does, so light falls off toward the edges instead of looking flat
+const ACROSS = [-1, -0.45, 0.45, 1];
+const ROLL = BAND_W * 0.07;
 
 // Fetch the model as plain bytes and parse it here, so no data: URLs are ever
 // fetched (some hosts' content policies refuse those). The preview build can
@@ -88,25 +92,43 @@ export async function createBadge(canvas, { face, onOpen, reducedMotion }) {
   });
   scene.add(card);
 
-  // lanyard: a flat printed ribbon that faces the camera
+  // lanyard: woven webbing with a printed intro (see band.js)
   const bandCanvas = Object.assign(document.createElement('canvas'), { width: BAND_TILE_W, height: BAND_TILE_H });
   drawBand(bandCanvas.getContext('2d'));
   const bandTex = new CanvasTexture(bandCanvas);
   bandTex.colorSpace = SRGBColorSpace;
   bandTex.wrapT = RepeatWrapping;
   bandTex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  const weaveCanvas = Object.assign(document.createElement('canvas'), { width: 16, height: 16 });
+  drawWeaveNormal(weaveCanvas.getContext('2d'));
+  const weave = new CanvasTexture(weaveCanvas);
+  weave.wrapS = weave.wrapT = RepeatWrapping;
+  weave.repeat.set(12, BAND_TILE_H / RIB_PX); // one rib per printed rib
+  weave.anisotropy = renderer.capabilities.getMaxAnisotropy();
   const band = new Mesh(
     new BufferGeometry(),
-    new MeshStandardMaterial({ map: bandTex, roughness: 0.85, side: DoubleSide })
+    new MeshPhysicalMaterial({
+      map: bandTex,
+      normalMap: weave,
+      normalScale: new Vector2(0.7, 0.7),
+      roughness: 0.82,
+      sheen: 1,                       // the soft glow polyester gets at a glancing angle
+      sheenRoughness: 0.45,
+      sheenColor: new Color(css('--momo')),
+      side: DoubleSide,
+    })
   );
-  const pos = new Float32Array((BAND_SAMPLES + 1) * 2 * 3);
-  const uvs = new Float32Array((BAND_SAMPLES + 1) * 2 * 2);
+  const COLS = ACROSS.length;
+  const pos = new Float32Array((BAND_SAMPLES + 1) * COLS * 3);
+  const uvs = new Float32Array((BAND_SAMPLES + 1) * COLS * 2);
   band.geometry.setAttribute('position', new BufferAttribute(pos, 3));
   band.geometry.setAttribute('uv', new BufferAttribute(uvs, 2));
   const idx = [];
   for (let i = 0; i < BAND_SAMPLES; i++) {
-    const a = i * 2;
-    idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2);
+    for (let c = 0; c < COLS - 1; c++) {
+      const a = i * COLS + c, b = a + COLS;
+      idx.push(a, a + 1, b, a + 1, b + 1, b);
+    }
   }
   band.geometry.setIndex(idx);
   scene.add(band);
@@ -118,22 +140,38 @@ export async function createBadge(canvas, { face, onOpen, reducedMotion }) {
   }
 
   const curve = new CatmullRomCurve3([], false, 'chordal');
-  const tan = new Vector3(), side = new Vector3(), view = new Vector3();
+  const tan = new Vector3(), side = new Vector3(), view = new Vector3(), cardFront = new Vector3(), back = new Vector3();
   function updateBand() {
     curve.points = sim.bandPoints().map((p) => p.clone());
     curve.updateArcLengths(); // the cache would otherwise keep last frame's lengths
     const pts = curve.getSpacedPoints(BAND_SAMPLES);
     const len = curve.getLength();
+    // the card's front, so the band can turn with it near the clasp
+    cardFront.set(0, 0, 1).applyQuaternion(card.quaternion);
     for (let i = 0; i <= BAND_SAMPLES; i++) {
       const p = pts[i];
-      curve.getTangentAt(i / BAND_SAMPLES, tan);
+      const k = i / BAND_SAMPLES;
+      curve.getTangentAt(k, tan);
       view.subVectors(camera.position, p).normalize();
+      // up top the band faces you; the last stretch twists toward the card's face
+      const turn = Math.max(0, (k - 0.6) / 0.4) ** 2 * 0.8;
+      const f = cardFront.dot(view) < 0 ? -1 : 1;
+      view.lerp(back.copy(cardFront).multiplyScalar(f), turn).normalize();
       side.crossVectors(tan, view).normalize().multiplyScalar(BAND_W / 2);
-      pos.set([p.x - side.x, p.y - side.y, p.z - side.z, p.x + side.x, p.y + side.y, p.z + side.z], i * 6);
+      back.crossVectors(side, tan).normalize(); // the band's own normal, toward the viewer
       // print runs down from the top; measured from the card end so it doesn't crawl as the band stretches
-      // u: 1 on the screen-right edge so the words read top to bottom, tops to the right
-      const v = (len - (i / BAND_SAMPLES) * len) / BAND_TILE;
-      uvs.set([1, v, 0, v], i * 4);
+      const v = (len - k * len) / BAND_TILE;
+      for (let c = 0; c < COLS; c++) {
+        const a = ACROSS[c];
+        const roll = Math.abs(a) === 1 ? -ROLL : 0;
+        const o = (i * COLS + c) * 3;
+        pos[o] = p.x + side.x * a + back.x * roll;
+        pos[o + 1] = p.y + side.y * a + back.y * roll;
+        pos[o + 2] = p.z + side.z * a + back.z * roll;
+        // u: 1 on the screen-right edge (ACROSS -1), so the print reads top to bottom, unmirrored
+        uvs[(i * COLS + c) * 2] = 0.5 - 0.5 * a;
+        uvs[(i * COLS + c) * 2 + 1] = v;
+      }
     }
     band.geometry.attributes.position.needsUpdate = true;
     band.geometry.attributes.uv.needsUpdate = true;

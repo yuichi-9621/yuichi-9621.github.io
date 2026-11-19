@@ -6,7 +6,7 @@
 import { Vector3, Quaternion, Matrix4 } from 'three';
 
 const CARD_H = 2.25;
-const ANCHOR_Y = 1.648;         // top of the swivel eye, in card space (tools/badge.py prints it)
+const ANCHOR_Y = 1.726;         // top bar of the webbing loop, in card space (tools/badge.py prints it)
 const FRONT = 0.35;             // the front particle sits this far in +z
 const ROPE = 4;                 // rope points below the fixed anchor
 const SEG = 0.55;               // rest length of each rope segment

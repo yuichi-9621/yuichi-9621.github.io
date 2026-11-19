@@ -100,34 +100,104 @@ parts = []
 JR = 0.075
 jump = ring('jump', SY + JR, JR, 0.011)
 parts.append(jump)
-# lobster clasp: a teardrop of wire, wide at the bottom where it hooks the ring
-cb = SY + 2 * JR - 0.02          # clasp bottom, hooked over the ring top
-CH, CW = 0.34, 0.075
-pts = []
-for i in range(64):
-    t = 2 * math.pi * i / 64     # 0 at the top
-    wf = 0.5 + 0.5 * (1 - math.cos(t)) / 2
-    pts.append((CW * math.sin(t) * wf * 1.6, cb + CH / 2 + CH / 2 * math.cos(t), 0))
-clasp = rod('clasp', pts, 0.025)
-clasp.scale.z = 0.75; bpy.context.view_layer.objects.active = clasp; clasp.select_set(True); bpy.ops.object.transform_apply(scale=True); clasp.select_set(False)
-parts.append(clasp)
-# the gate lever: a small nub on the right side of the clasp
-nub = rod('nub', [(CW * 0.95, cb + CH * 0.42, 0), (CW * 1.45, cb + CH * 0.5, 0)], 0.02, closed=False)
-parts.append(nub)
-# swivel barrel and the eye the lanyard loops through
-bpy.ops.mesh.primitive_cylinder_add(vertices=24, radius=0.026, depth=0.07, location=(0, cb + CH + 0.03, 0),
+# lobster clasp, built like the real thing: a chunky pressed claw with a
+# small eye-shaped hole, thick along the back, a thin spring gate closing the
+# left side, a ridged trigger tab on the gate, a tapered neck, and a small
+# swivel ring the lanyard loops through.
+CB_BEV = 0.018                       # the rounded edge that softens every outline
+cb = SY + 2 * JR - 0.011 - CB_BEV - 0.03   # claw bottom: the jump ring rests in its hole
+HO = 0.40                            # claw height (outline, before the rounded edge)
+
+def rod_tapered(name, pts, radii, flat=1.0, closed=False):
+    """A wire whose thickness changes along its length (per-point radius)."""
+    cu = bpy.data.curves.new(name, 'CURVE'); cu.dimensions = '3D'
+    cu.bevel_depth = 1.0; cu.bevel_resolution = 5; cu.use_fill_caps = True
+    sp = cu.splines.new('POLY'); sp.points.add(len(pts) - 1)
+    for p, (x, y, z), r in zip(sp.points, pts, radii):
+        p.co = (x, y, z, 1); p.radius = r
+    sp.use_cyclic_u = closed
+    ob = bpy.data.objects.new(name, cu); scene.collection.objects.link(ob)
+    bpy.context.view_layer.objects.active = ob; ob.select_set(True)
+    bpy.ops.object.convert(target='MESH')
+    ob.scale.z = flat
+    bpy.ops.object.transform_apply(scale=True)
+    ob.select_set(False)
+    return ob
+
+def plate(name, loop, half_thick, bevel, z=0.0):
+    """A flat outline pressed into a pillowy solid: rounded on every edge."""
+    cu = bpy.data.curves.new(name, 'CURVE'); cu.dimensions = '2D'; cu.fill_mode = 'BOTH'
+    cu.extrude = max(half_thick - bevel, 0.0005); cu.bevel_depth = bevel; cu.bevel_resolution = 4
+    sp = cu.splines.new('POLY'); sp.points.add(len(loop) - 1)
+    for p, (x, y) in zip(sp.points, loop): p.co = (x, y, 0, 1)
+    sp.use_cyclic_u = True
+    ob = bpy.data.objects.new(name, cu); scene.collection.objects.link(ob)
+    bpy.context.view_layer.objects.active = ob; ob.select_set(True)
+    bpy.ops.object.convert(target='MESH')
+    ob.select_set(False)
+    ob.location.z = z
+    return ob
+
+def outer(t):
+    """The claw's outline. t runs clockwise from the neck (0): down the thick
+    back on the right, under the round bottom, up the gate side on the left."""
+    a = 2 * math.pi * t
+    wf = 0.42 + 0.58 * (1 - math.cos(a)) / 2
+    sx = 0.14 if math.sin(a) > 0 else 0.12
+    return (sx * math.sin(a) * wf, cb + HO / 2 * (1 + math.cos(a)))
+
+def inner(t):
+    """The hole: a small egg, low and toward the gate side."""
+    a = 2 * math.pi * t
+    wf = 0.8 + 0.2 * (1 - math.cos(a)) / 2
+    return (-0.016 + 0.056 * math.sin(a) * wf, cb + 0.152 + 0.122 * math.cos(a))
+
+def span(f, t0, t1, n):
+    return [f(t0 + (t1 - t0) * i / n) for i in range(n + 1)]
+
+TIP, GTOP = 0.68, 0.915   # where the claw's tip ends and where the gate meets the body
+body_loop = span(outer, 0.0, TIP, 70) + span(inner, TIP, GTOP - 1, 60)
+body = plate('claw', body_loop, 0.03, CB_BEV)
+parts.append(body)
+# the gate fills the gap, a touch thinner, with a hairline seam at each end
+gate_loop = span(outer, TIP + 0.016, 0.99, 24) + span(inner, GTOP - 0.008, TIP + 0.014, 16)
+gate = plate('gate', gate_loop, 0.022, 0.011)
+parts.append(gate)
+# the trigger: a thin tab on the gate's outside, ridged for a thumb
+gx, gy = outer(0.875)
+tab_loop = [(gx + 0.01, gy - 0.026), (gx - 0.045, gy - 0.012), (gx - 0.055, gy + 0.01), (gx - 0.035, gy + 0.03), (gx + 0.01, gy + 0.024)]
+tab = plate('tab', tab_loop, 0.011, 0.008)
+parts.append(tab)
+for k in range(3):
+    rx = gx - 0.014 - 0.012 * k
+    for zs in (1, -1):
+        parts.append(rod_tapered(f'ridge{k}{zs}', [(rx, gy - 0.014, zs * 0.011), (rx - 0.004, gy + 0.018, zs * 0.011)],
+                                 [0.0035, 0.0035]))
+
+# the neck: a short tapered stem from the top of the claw up to the swivel
+neck_y0 = cb + HO
+neck = rod_tapered('neck', [(0, neck_y0, 0), (0, neck_y0 + 0.05, 0), (0, neck_y0 + 0.08, 0)],
+                   [0.03, 0.02, 0.025], flat=0.85)
+parts.append(neck)
+# swivel collar, then a small ring standing across the card for the lanyard
+bpy.ops.mesh.primitive_cylinder_add(vertices=24, radius=0.03, depth=0.03, location=(0, neck_y0 + 0.095, 0),
                                     rotation=(math.pi / 2, 0, 0))
-barrel = bpy.context.active_object; barrel.name = 'barrel'
-bpy.ops.object.shade_smooth()
-parts.append(barrel)
-EYE = 0.055
-eye = ring('eye', cb + CH + 0.065 + EYE, EYE, 0.012, plane='YZ')
-parts.append(eye)
+collar = bpy.context.active_object; collar.name = 'collar'
+bev2 = collar.modifiers.new('b', 'BEVEL'); bev2.width = 0.006; bev2.segments = 3
+bpy.ops.object.modifier_apply(modifier='b')
+parts.append(collar)
+# the webbing loop: a flat rounded bar loop facing you, wide enough for the
+# lanyard to wrap over its top bar (a narrow ring would pinch the webbing)
+LW, LH, LR, LWIRE = 0.32, 0.11, 0.035, 0.012
+loop_y0 = neck_y0 + 0.11 + LWIRE                    # bottom bar sits on the swivel
+loop_pts = [(x, y + loop_y0 + LH / 2, 0) for x, y in rounded_rect(LW, LH, LR, 8)]
+webloop = rod('webloop', loop_pts, LWIRE)
+parts.append(webloop)
+ANCHOR = loop_y0 + LH                                # the band wraps over the top bar
 for ob in parts:
     ob.data.materials.clear()
     ob.data.materials.append(metal)
     for p in ob.data.polygons: p.use_smooth = True
-ANCHOR = cb + CH + 0.065 + 2 * EYE
 clip = bpy.data.objects.new('clip', None); scene.collection.objects.link(clip)
 
 # stand the badge up: modeled in XY facing +Z, glTF wants Y-up facing +Z
@@ -146,9 +216,11 @@ print('anchor_y', round(ANCHOR, 3), 'tris', sum(len(o.data.polygons) for o in [c
 if '--render' in sys.argv:
     # a check render, for looking at the fittings (not shipped)
     import mathutils
-    bpy.ops.object.camera_add(location=(1.4, -4.2, 1.2))
+    close = '--close' in sys.argv     # a close look at the clasp
+    look = mathutils.Vector((0, 0, 1.25)) if close else mathutils.Vector((0, 0, 0.35))
+    bpy.ops.object.camera_add(location=(0.5, -1.5, 1.45) if close else (1.4, -4.2, 1.2))
     cam = bpy.context.active_object; scene.camera = cam
-    d = mathutils.Vector((0, 0, 0.35)) - cam.location
+    d = look - cam.location
     cam.rotation_euler = d.to_track_quat('-Z', 'Y').to_euler(); cam.data.lens = 50
     bpy.ops.object.light_add(type='AREA', location=(-1.5, -3, 3)); bpy.context.active_object.data.energy = 400
     bpy.ops.object.light_add(type='AREA', location=(2, -1, 2)); bpy.context.active_object.data.energy = 150

@@ -90,9 +90,9 @@ The card itself is thick glossy PVC (0.032 units, bevelled edges): a clear coat 
 
 ## 7. Lanyard and fittings
 
-Vermilion webbing 0.22 units wide, dark red woven edges, a purple pinstripe inside each edge, and a printed intro running down it in mono: YUICHI OKUHAMA, DESIGN ENGINEER, SAN FRANCISCO, FROM OKINAWA, 引き算, with purple dots between. One 2048 px tile repeats; the print is anchored at the card end so it doesn't crawl as the band stretches.
+Woven vermilion webbing 0.26 units wide: dark red selvedge edges with a fine twill, a purple pinstripe inside each edge, and a printed intro running down it: YUICHI OKUHAMA, DESIGN ENGINEER, SAN FRANCISCO, FROM OKINAWA in mono turned sideways, then 引き算 standing upright (tategaki), with purple dots between. The weave is drawn over the print so the ribs run through the letters, a small normal map gives each rib depth, sheen gives polyester's soft glow, and the edges roll back a little. The end that wraps the clasp loop is sewn down with a box-X stitch. One 4096 px tile is longer than the band, so the stitch shows once and the print never visibly repeats. Near the clasp the band turns with the card.
 
-Fittings, modeled in `tools/badge.py`, polished steel: a jump ring through the slot, a lobster clasp hooked on it with a gate lever, and a swivel with an eye that the lanyard loops through.
+Fittings, modeled in `tools/badge.py`, polished steel: a jump ring through the slot; a lobster clasp hooked on it, pressed as one chunky claw with a small egg-shaped hole, a thinner spring gate with hairline seams, and a ridged trigger tab; a tapered neck and swivel collar; and a flat rounded webbing loop on top, wide enough for the lanyard to wrap.
 
 ## 8. Sheet
 
