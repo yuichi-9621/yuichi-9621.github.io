@@ -143,6 +143,20 @@ blockquote { margin: var(--space-4) 0; padding-left: var(--space-3); border-left
 .kv { display: grid; grid-template-columns: 7rem 1fr; gap: var(--space-2) var(--space-3); margin: var(--space-4) 0; }
 .kv dt { color: var(--ink-dim); }
 .kv dd { margin: 0; }
+.unlock label { display: block; }
+.unlock-row { display: flex; gap: var(--space-2); margin-top: var(--space-2); }
+.unlock input {
+  font: inherit; color: var(--ink); background: transparent; width: 11rem; min-width: 0;
+  min-height: var(--hit-min); padding: 0 var(--space-2);
+  border: 1px solid var(--ink-dim); border-radius: 4px;
+}
+.unlock button {
+  min-height: var(--hit-min); padding: 0 var(--space-3);
+  border: 1px solid var(--ink); border-radius: 4px; font-weight: var(--weight-bold);
+}
+.unlock button:hover { background: var(--hairline-on-cotton); }
+.unlock button:disabled { opacity: 0.6; cursor: progress; }
+.unlock-msg { display: block; min-height: 1.6em; margin-top: var(--space-1); }
 
 @media (prefers-reduced-motion: reduce) {
   #sheet[open], #sheet.leaving { animation-name: fade-in; }

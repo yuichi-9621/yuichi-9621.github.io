@@ -1,6 +1,7 @@
 // The one sheet that opens over the badge (DESIGN.md §8).
 // A native <dialog>: it traps focus, closes on Esc, and returns focus.
 import { site, projects, about, built, sideProjects, beliefs } from './content.js';
+import { unlockResume } from './resume.js';
 
 const esc = (s) =>
   String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -62,6 +63,16 @@ const pages = {
     <p>I’m looking for a design engineering role, and I’m always up for a good side project. Email is the fastest way to reach me.</p>
     <dl class="kv">
       <dt>email</dt><dd><a href="mailto:${site.email}">${esc(site.email)}</a></dd>
+      <dt>resume</dt><dd>
+        <form class="unlock" data-resume>
+          <label for="resume-code">Ask me for the code, then download the PDF.</label>
+          <span class="unlock-row">
+            <input id="resume-code" type="password" autocomplete="off" autocapitalize="none" spellcheck="false" required>
+            <button type="submit">Download</button>
+          </span>
+          <span class="unlock-msg quiet" role="status" aria-live="polite"></span>
+        </form>
+      </dd>
       ${site.socials
         .filter((s) => s.label !== 'Email')
         .map((s) => `<dt>${esc(s.label.toLowerCase())}</dt><dd>${ext(s.url, esc(s.url.replace(/^https:\/\/(www\.)?/, '').replace(/\/$/, '')))}</dd>`)
@@ -146,6 +157,32 @@ export function createSheet({ onChange }) {
     if (t.dataset.close !== undefined) close();
     else if (t.dataset.study) open(t.dataset.study);
     else open(t.dataset.page);
+  });
+
+  dlg.addEventListener('submit', async (e) => {
+    const form = e.target.closest('[data-resume]');
+    if (!form) return;
+    e.preventDefault();
+    const input = form.querySelector('input');
+    const msg = form.querySelector('.unlock-msg');
+    const btn = form.querySelector('button');
+    btn.disabled = true;
+    msg.textContent = 'Checking…';
+    try {
+      const url = URL.createObjectURL(await unlockResume(input.value));
+      const a = Object.assign(document.createElement('a'), { href: url, download: 'Yuichi-Okuhama-Resume.pdf' });
+      document.body.append(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+      msg.textContent = 'Downloading.';
+      input.value = '';
+    } catch {
+      msg.textContent = 'That code didn’t work.';
+      input.select();
+    } finally {
+      btn.disabled = false;
+    }
   });
 
   return { open, close, get isOpen() { return dlg.open; } };
