@@ -72,6 +72,7 @@ Face fill ai. Text cotton, left aligned at x=96. Destination labels right aligne
 | Hairline | | y=952 | | |
 | Contact | Say hello | baseline y=1044 | 56, 400 | Contact |
 | Hairline | | y=1096 | | |
+| Waves | five thin sine lines across the full width, y 1150 to 1318 | 3 px, cotton fading from 30% to 14% | | none |
 | Bottom line | FROM OKINAWA, JAPAN | baseline y=1344 | mono 26, 0.06em, cotton-dim | none |
 
 Hit areas span x 64 to 960. Name: y 408 to 784. Rows: 808 to 952, 952 to 1096. The space below stays empty on purpose. Each row is 144 px, which is 45 CSS px when the badge renders 320 px wide. Don't render it narrower.
@@ -82,7 +83,7 @@ Hover or focus: line text and destination word turn yamabuki, and a 16 x 16 yama
 
 ## 6. Badge back
 
-Face fill ai. 奥浜 stacked vertically, 360 px, 700, cotton. 引き算 at baseline y=1300, 30 px, 700, tracked, and THE ART OF SUBTRACTION under it in mono 22 px, both cotton-dim. Not clickable.
+Face fill ai. A hanko seal: a 460 px shu square, slightly turned, with a thin paper inner border and 奥浜 stacked inside in paper, 172 px, 700. 引き算 at baseline y=1300, 30 px, 700, tracked, and THE ART OF SUBTRACTION under it in mono 22 px, both cotton-dim. Not clickable.
 
 The card itself is thick glossy PVC (0.032 units, bevelled edges): a clear coat over the print, so highlights slide across it as it swings.
 

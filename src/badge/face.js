@@ -83,6 +83,21 @@ export function drawFront(ctx, { name, role, company, place, active = null, focu
     text(id, RIGHT, y, 26, 400, toneDim(id), 'right', 0, c.mono);
   }
 
+  // waves along the bottom, the same sea as the page behind the badge
+  ctx.save();
+  ctx.lineWidth = 3;
+  for (let k = 0; k < 5; k++) {
+    const y0 = 1150 + k * 42, amp = 16, len = 150 + k * 6;
+    ctx.strokeStyle = `rgb(241 234 214 / ${0.3 - k * 0.04})`;
+    ctx.beginPath();
+    for (let x = -20; x <= FACE_W + 20; x += 4) {
+      const y = y0 + Math.sin((x / len) * Math.PI * 2 + k * 1.3) * amp;
+      if (x === -20) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  }
+  ctx.restore();
+
   // bottom line
   text('FROM OKINAWA, JAPAN', M, 1344, 26, 400, c.dim, 'left', 26 * 0.06, c.mono);
 
@@ -108,10 +123,26 @@ export function drawBack(ctx) {
   ctx.fillRect(0, 0, FACE_W, FACE_H);
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillStyle = cotton;
-  ctx.font = `700 360px ${font}`;
-  ctx.fillText('奥', 512, 540);
-  ctx.fillText('浜', 512, 900);
+  // a hanko seal: 奥浜 carved into a vermilion square, with a thin inner border
+  const shu = css('--shu') || '#c4382a', paper = css('--paper') || cotton;
+  const S = 460, cx = 512, cy = 700;
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(-0.03);
+  ctx.fillStyle = shu;
+  ctx.beginPath();
+  ctx.roundRect(-S / 2, -S / 2, S, S, 28);
+  ctx.fill();
+  ctx.strokeStyle = paper;
+  ctx.lineWidth = 12;
+  ctx.beginPath();
+  ctx.roundRect(-S / 2 + 28, -S / 2 + 28, S - 56, S - 56, 12);
+  ctx.stroke();
+  ctx.fillStyle = paper;
+  ctx.font = `700 172px ${font}`;
+  ctx.fillText('奥', 0, -84);
+  ctx.fillText('浜', 0, 92);
+  ctx.restore();
   ctx.textBaseline = 'alphabetic';
   ctx.fillStyle = dim;
   ctx.font = `700 30px ${font}`;
