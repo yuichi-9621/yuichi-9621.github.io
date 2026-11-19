@@ -278,8 +278,8 @@ export const built = {
   intro: 'Both are live. I did the design and wrote the code.',
   items: [
     {
-      title: 'yuichiokuhama.com',
-      desc: 'The site you’re on. One badge on a lanyard that you can grab and swing, and every line on it opens a page. I modeled the card in Blender and draw it with three.js. The colors come from photos of 19th century bingata robes from Okinawa.',
+      title: 'This site, and why it’s a badge',
+      desc: 'I spend a lot of my time at conferences and running events, and that’s where people meet you through a badge on a lanyard: your name, what you do, where you’re from. So my site is a badge too. The first thing you see is who I am, and every line on it opens a page. It also keeps me honest about 引き算, since a badge only has room for what matters.',
       stack: ['three.js', 'Blender', 'Vite', 'GitHub Pages'],
       links: [
         ['live', 'https://yuichiokuhama.com'],
@@ -292,16 +292,6 @@ export const built = {
       links: [['live', 'https://all-sqr.com']],
     },
   ],
-  craft: {
-    title: 'how this site is made',
-    points: [
-      'Built around 引き算, the Japanese idea of making something better by taking things away. One object on the page, four colors, one typeface.',
-      'No framework. The swing is a small physics sim of a few rope points and a rigid card, not a physics engine.',
-      'The card and clip are modeled in Blender from a script, not by hand.',
-      'Holds still if your system asks for reduced motion.',
-      'Every line on the badge is also a real button, so it works with a keyboard and a screen reader, and without WebGL.',
-    ],
-  },
 };
 
 // Smaller projects — shipped fast, no full case study. Add `link` when ready.

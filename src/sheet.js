@@ -46,8 +46,6 @@ const pages = {
         </section>`
       )
       .join('')}
-    <h4>${esc(built.craft.title)}</h4>
-    <ul class="list plain">${built.craft.points.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
     <h3>Also shipped</h3>
     <ul class="list shipped">
       ${sideProjects
