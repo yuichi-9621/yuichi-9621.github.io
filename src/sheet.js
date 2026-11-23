@@ -20,21 +20,6 @@ const pages = {
 
   work: () => `
     <h2 id="sheet-title">Work</h2>
-    <h3>How I design</h3>
-    <ol class="list beliefs">
-      ${beliefs.map(([t, d]) => `<li><strong>${esc(t)}</strong><span class="quiet">${esc(d)}</span></li>`).join('')}
-    </ol>
-    <h3>Case studies</h3>
-    <ul class="list rows">
-      ${projects
-        .map(
-          (p) => `<li><button type="button" class="row" data-study="${p.id}">
-            <span class="when">${esc(p.year)}</span>
-            <span><strong>${esc(p.title)}</strong><span class="quiet">${esc(p.summary)}</span></span>
-          </button></li>`
-        )
-        .join('')}
-    </ul>
     <h3>Things I built</h3>
     <p>${esc(built.intro)}</p>
     ${built.items
@@ -47,6 +32,21 @@ const pages = {
         </section>`
       )
       .join('')}
+    <h3>Case studies</h3>
+    <ul class="list rows">
+      ${projects
+        .map(
+          (p) => `<li><button type="button" class="row" data-study="${p.id}">
+            <span class="when">${esc(p.year)}</span>
+            <span><strong>${esc(p.title)}</strong><span class="quiet">${esc(p.summary)}</span></span>
+          </button></li>`
+        )
+        .join('')}
+    </ul>
+    <h3>How I design</h3>
+    <ol class="list beliefs">
+      ${beliefs.map(([t, d]) => `<li><strong>${esc(t)}</strong><span class="quiet">${esc(d)}</span></li>`).join('')}
+    </ol>
     <h3>Also shipped</h3>
     <ul class="list shipped">
       ${sideProjects

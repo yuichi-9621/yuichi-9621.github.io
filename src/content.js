@@ -22,7 +22,7 @@ export const site = {
 // How I design, in my own words. Shown first on the Work page.
 export const beliefs = [
   ['Design serves both sides', 'A design is a feature that, once it’s real, satisfies its stakeholders: the people who use it and the business behind it.'],
-  ['Take away until it’s clear', '引き算, the art of subtraction. Growing up in Japan taught me that the best version is often the one with less in it.'],
+  ['Take away until it’s clear', 'The art of subtraction, or 引き算 in Japanese. Growing up in Japan taught me that the best version is often the one with less in it.'],
   ['Go wide, then narrow', 'I work in a double diamond. First I explore to find the right problem and narrow it down, then explore again to find the right solution.'],
 ];
 
@@ -279,7 +279,7 @@ export const built = {
   items: [
     {
       title: 'This site, and why it’s a badge',
-      desc: 'I spend a lot of my time at conferences and running events, and that’s where people meet you through a badge on a lanyard: your name, what you do, where you’re from. So my site is a badge too. The first thing you see is who I am, and every line on it opens a page. It also keeps me honest about 引き算, since a badge only has room for what matters.',
+      desc: 'I spend a lot of my time at conferences and running events, and that’s where people meet you through a badge on a lanyard: your name, what you do, where you’re from. So my site is a badge too. The first thing you see is who I am, and every line on it opens a page. It also keeps me honest about subtraction, since a badge only has room for what matters.',
       stack: ['three.js', 'Blender', 'Vite', 'GitHub Pages'],
       links: [
         ['live', 'https://yuichiokuhama.com'],

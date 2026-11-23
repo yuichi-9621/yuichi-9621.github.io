@@ -144,13 +144,20 @@ export function drawBack(ctx) {
   ctx.fillText('浜', 0, 92);
   ctx.restore();
   ctx.textBaseline = 'alphabetic';
+  // the seal is my surname, so say so for anyone who doesn't read it
   ctx.fillStyle = dim;
-  ctx.font = `700 30px ${font}`;
-  if ('letterSpacing' in ctx) ctx.letterSpacing = '12px';
-  ctx.fillText('引き算', 512 + 6, 1300);
-  if ('letterSpacing' in ctx) ctx.letterSpacing = '4px';
   ctx.font = `400 22px ${mono}`;
-  ctx.fillText('THE ART OF SUBTRACTION', 512 + 2, 1352);
+  if ('letterSpacing' in ctx) ctx.letterSpacing = '4px';
+  ctx.fillText('OKUHAMA', 512 + 2, 1000);
+  // English first, the Japanese word under it
+  ctx.fillStyle = cotton;
+  ctx.font = `700 34px ${font}`;
+  if ('letterSpacing' in ctx) ctx.letterSpacing = '3px';
+  ctx.fillText('THE ART OF SUBTRACTION', 512 + 2, 1300);
+  ctx.fillStyle = dim;
+  ctx.font = `700 24px ${font}`;
+  if ('letterSpacing' in ctx) ctx.letterSpacing = '8px';
+  ctx.fillText('引き算', 512 + 4, 1350);
   if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
   ctx.restore();
 }
